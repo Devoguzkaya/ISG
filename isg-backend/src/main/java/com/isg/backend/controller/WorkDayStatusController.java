@@ -4,7 +4,6 @@ import com.isg.backend.model.WorkDayStatus;
 import com.isg.backend.repository.WorkDayStatusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController

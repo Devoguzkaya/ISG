@@ -136,31 +136,31 @@ const PersonnelPage = () => {
     <div className="space-y-8 animate-fade pb-10">
       <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-primary">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary">
             {isHistoryMode ? 'Geçmiş Personel Kaydı' : 'Aktif Personel Listesi'}
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
             {isHistoryMode 
               ? `${new Date(historyDate).toLocaleDateString('tr-TR')} tarihindeki kadro durumu.`
               : 'Şu an sahada görevli olan aktif ekip.'}
           </p>
         </div>
         
-        <div className="flex flex-wrap items-center gap-3">
-          <form onSubmit={handleSearchHistory} className="flex items-center gap-2 bg-white border border-border p-1 rounded-xl shadow-sm">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <form onSubmit={handleSearchHistory} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-white border border-border p-1 rounded-xl shadow-sm">
             <div className="flex items-center gap-2 px-3 text-muted-foreground">
               <Calendar size={18} />
-              <input type="date" value={historyDate} onChange={(e) => setHistoryDate(e.target.value)} className="bg-transparent border-none outline-none text-sm font-semibold text-primary py-2" />
+              <input type="date" value={historyDate} onChange={(e) => setHistoryDate(e.target.value)} className="bg-transparent border-none outline-none text-sm font-semibold text-primary py-2 flex-grow min-w-[120px]" />
             </div>
-            <button type="submit" className="bg-slate-100 hover:bg-slate-200 text-primary p-2 rounded-lg transition-colors flex items-center gap-2 text-xs font-bold">
+            <button type="submit" className="bg-slate-100 hover:bg-slate-200 text-primary px-4 py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 text-[10px] font-black tracking-widest uppercase">
               <History size={16} /> GEÇMİŞE GİT
             </button>
             {isHistoryMode && (
-              <button type="button" onClick={resetToCurrent} className="text-xs font-bold text-red-500 px-3 hover:underline">GÜNCEL DURUM</button>
+              <button type="button" onClick={resetToCurrent} className="text-xs font-bold text-red-500 py-2 sm:px-3 hover:underline">GÜNCEL DURUM</button>
             )}
           </form>
 
-          <button onClick={handleOpenAdd} className="bg-primary text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-slate-800 shadow-lg">
+          <button onClick={handleOpenAdd} className="bg-primary text-white px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 shadow-lg active:scale-95 transition-all">
             <Plus size={20} /> Yeni Ekle
           </button>
         </div>
@@ -171,19 +171,19 @@ const PersonnelPage = () => {
           <Loader2 className="animate-spin text-primary" size={48} />
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {staff.map((person) => {
              const isResigned = person.validTo && new Date(person.validTo) <= new Date();
              return (
-              <div key={person.id} className={`card-premium group relative ${isResigned ? 'opacity-60 bg-slate-50' : ''}`}>
+              <div key={person.id} className={`card-premium group relative p-5 ${isResigned ? 'opacity-60 bg-slate-50' : ''}`}>
                 <div className="flex items-start justify-between mb-6">
                   <div className="flex items-center gap-4">
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${isResigned ? 'bg-slate-200 text-slate-400' : 'bg-slate-100 text-primary'}`}>
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center font-black text-xl flex-shrink-0 ${isResigned ? 'bg-slate-200 text-slate-400' : 'bg-slate-100 text-primary'}`}>
                       {person.fullName.charAt(0)}
                     </div>
                     <div>
-                      <h3 className={`font-bold ${isResigned ? 'text-slate-500' : 'text-primary'}`}>{person.fullName}</h3>
-                      <p className="text-xs text-muted-foreground font-medium">{person.role}</p>
+                      <h3 className={`font-black tracking-tight ${isResigned ? 'text-slate-500' : 'text-primary'}`}>{person.fullName}</h3>
+                      <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{person.role}</p>
                     </div>
                   </div>
                   {isResigned && <UserX size={20} className="text-red-400" />}
@@ -191,29 +191,45 @@ const PersonnelPage = () => {
 
                 <div className="space-y-3 mb-6 font-medium text-sm text-slate-600">
                   <div className="flex items-center gap-3">
-                    <Phone size={14} className="text-slate-300" />
-                    <span>{person.phone || '-'}</span>
+                    <div className="p-2 bg-slate-50 rounded-lg text-slate-400">
+                      <Phone size={14} />
+                    </div>
+                    <span className="font-bold">{person.phone || '-'}</span>
                   </div>
                    {person.validTo && (
-                    <div className="flex items-center gap-3 text-red-500">
+                    <div className="flex items-center gap-3 text-red-500 bg-red-50 p-2 rounded-lg">
                       <Calendar size={14} />
-                      <span>Ayrılma: {new Date(person.validTo).toLocaleDateString('tr-TR')}</span>
+                      <span className="text-xs font-bold uppercase tracking-tighter">Ayrılma: {new Date(person.validTo).toLocaleDateString('tr-TR')}</span>
                     </div>
                   )}
                 </div>
 
-                <div className="pt-4 border-t flex items-center justify-between">
-                  <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${isResigned ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+                <div className="pt-4 border-t flex flex-wrap items-center justify-between gap-4">
+                  <span className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest ${isResigned ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
                     {isResigned ? 'AYRILDI' : 'AKTİF'}
                   </span>
                    {!isHistoryMode && (
-                    <div className="flex items-center gap-3">
-                      <Link href={`/personnel/${person.id}`} className="text-xs font-bold text-primary hover:underline">DETAYLAR</Link>
-                      <button onClick={() => handleOpenEdit(person)} className="text-xs font-bold text-slate-400 hover:text-primary transition-colors">
-                        <Edit3 size={14} />
+                    <div className="flex items-center gap-2">
+                      <Link 
+                        href={`/personnel/${person.id}`} 
+                        className="p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-primary hover:bg-white transition-all shadow-sm"
+                        title="Dosyayı Gör"
+                      >
+                        <Save size={16} /> {/* Replace Details with a file icon or similar if wanted, but keep it simple */}
+                      </Link>
+                      <button 
+                        onClick={() => handleOpenEdit(person)} 
+                        className="p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-400 hover:text-primary transition-all shadow-sm"
+                        title="Düzenle"
+                      >
+                        <Edit3 size={16} />
                       </button>
-                      <button onClick={() => handleDelete(person.id)} className="text-xs font-bold text-red-300 hover:text-red-500 transition-colors">
-                        <Trash2 size={14} />
+                      <button 
+                        onClick={() => handleDelete(person.id)} 
+                        className="p-2.5 bg-red-50 border border-red-100 rounded-lg text-red-300 hover:text-red-500 transition-all shadow-sm"
+                        title="Sil"
+                      >
+                        <Trash2 size={16} />
                       </button>
                     </div>
                   )}
@@ -224,29 +240,29 @@ const PersonnelPage = () => {
         </div>
       )}
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Personel Bilgilerini Düzenle">
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Personel Bilgileri">
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-400">Ad Soyad</label>
-              <input required className="w-full p-3 bg-slate-50 border rounded-xl font-bold" value={formData.fullName} onChange={e=>setFormData({...formData, fullName: e.target.value})}/>
+              <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Ad Soyad</label>
+              <input required className="w-full p-4 bg-slate-50 border rounded-xl font-bold" value={formData.fullName} onChange={e=>setFormData({...formData, fullName: e.target.value})}/>
             </div>
              <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-400">Görev</label>
-              <input required className="w-full p-3 bg-slate-50 border rounded-xl" value={formData.role} onChange={e=>setFormData({...formData, role: e.target.value})}/>
+              <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Görev</label>
+              <input required className="w-full p-4 bg-slate-50 border rounded-xl" value={formData.role} onChange={e=>setFormData({...formData, role: e.target.value})}/>
             </div>
           </div>
           <div className="space-y-1">
-            <label className="text-[10px] font-bold uppercase text-slate-400">Telefon</label>
-            <input className="w-full p-3 bg-slate-50 border rounded-xl" value={formData.phone} onChange={e=>setFormData({...formData, phone: e.target.value})}/>
+            <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Telefon</label>
+            <input className="w-full p-4 bg-slate-50 border rounded-xl" value={formData.phone} onChange={e=>setFormData({...formData, phone: e.target.value})}/>
           </div>
           <div className="space-y-1">
-            <label className="text-[10px] font-bold uppercase text-slate-300">İşten Ayrılma Tarihi (Girilirse Pasife Düşer)</label>
-            <input type="date" className="w-full p-3 bg-slate-100 border rounded-xl" value={formData.resignationDate} onChange={e=>setFormData({...formData, resignationDate: e.target.value})}/>
+            <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Ayrılma Tarihi (Opsiyonel)</label>
+            <input type="date" className="w-full p-4 bg-slate-100 border rounded-xl" value={formData.resignationDate} onChange={e=>setFormData({...formData, resignationDate: e.target.value})}/>
           </div>
-          <button type="submit" disabled={formLoading} className="w-full py-4 bg-primary text-white rounded-xl font-black mt-4">
-            {formLoading ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} className="inline mr-2" />}
-            BİLGİLERİ GÜNCELLE
+          <button type="submit" disabled={formLoading} className="w-full py-5 bg-primary text-white rounded-xl font-black mt-4 shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+            {formLoading ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
+            BİLGİLERİ KAYDET
           </button>
         </form>
       </Modal>

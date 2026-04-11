@@ -13,7 +13,7 @@ import {
   Zap
 } from 'lucide-react';
 
-const Sidebar = () => {
+const Sidebar = ({ onClose }: { onClose?: () => void }) => {
   const pathname = usePathname();
 
   const navItems = [
@@ -55,6 +55,7 @@ const Sidebar = () => {
             <Link 
               key={item.name} 
               href={item.href}
+              onClick={onClose}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
                 isActive 
                   ? 'bg-accent text-accent-foreground font-bold shadow-lg shadow-accent/20' 
@@ -66,11 +67,24 @@ const Sidebar = () => {
             </Link>
           );
         })}
+        
+        {/* Mobile-only Quick Action */}
+        <div className="lg:hidden mt-6 pb-4">
+          <Link 
+            href="/checklists/new?type=SITE_AUDIT"
+            onClick={onClose}
+            className="w-full bg-red-600 text-white p-4 rounded-xl flex items-center justify-center gap-3 font-bold text-sm shadow-xl shadow-red-600/20 active:scale-[0.98] transition-all"
+          >
+            <Zap size={20} className="fill-current" />
+            HIZLI DENETİM YAP
+          </Link>
+        </div>
       </nav>
 
       <div className="mt-auto pt-6 border-t border-white/10">
         <Link 
           href="/settings"
+          onClick={onClose}
           className="flex items-center gap-3 px-4 py-3 text-white/40 hover:text-white transition-colors"
         >
           <Settings size={20} />

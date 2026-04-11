@@ -202,16 +202,83 @@ const CalendarPage = () => {
           <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Veriler Yükleniyor...</p>
         </div>
       ) : (
-        <div className="card-premium p-0 overflow-hidden border-border bg-white shadow-xl">
-          <div className="grid grid-cols-7 border-b border-slate-100 bg-slate-50/50">
-            {dayNames.map(d => (
-              <div key={d} className="py-4 text-center text-[10px] font-black uppercase tracking-widest text-slate-400 border-r border-slate-100 italic">
-                {d}
-              </div>
-            ))}
+        <div className="space-y-6">
+          {/* Desktop Grid View */}
+          <div className="hidden lg:block card-premium p-0 overflow-hidden border-border bg-white shadow-xl">
+            <div className="grid grid-cols-7 border-b border-slate-100 bg-slate-50/50">
+              {dayNames.map(d => (
+                <div key={d} className="py-4 text-center text-[10px] font-black uppercase tracking-widest text-slate-400 border-r border-slate-100 italic">
+                  {d}
+                </div>
+              ))}
+            </div>
+            <div className="grid grid-cols-7 border-l border-slate-100">
+              {renderCells()}
+            </div>
           </div>
-          <div className="grid grid-cols-7 border-l border-slate-100">
-            {renderCells()}
+
+          {/* Mobile Agenda View */}
+          <div className="lg:hidden space-y-3">
+            {Array.from({ length: days }, (_, i) => i + 1).map(d => {
+              const date = new Date(year, month, d);
+              const dateStr = date.toISOString().split('T')[0];
+              const workOccurred = workStatuses[dateStr] || false;
+              const isToday = today.getDate() === d && today.getMonth() === month && today.getFullYear() === year;
+              const dayChecklists = checklists.filter(c => c.createdAt && c.createdAt.startsWith(dateStr));
+              const isCriticalMissing = workOccurred && dayChecklists.length === 0;
+              const isCompliant = workOccurred && dayChecklists.length > 0;
+
+              return (
+                <div 
+                  key={d} 
+                  onClick={() => handleDateClick(d)}
+                  className={`card-premium p-4 flex items-center justify-between gap-4 transition-all active:scale-[0.98] ${
+                    isCriticalMissing ? 'border-l-4 border-l-red-600 bg-red-50/30' : 
+                    isCompliant ? 'border-l-4 border-l-green-600 bg-green-50/30' : 
+                    isToday ? 'ring-2 ring-primary ring-inset' : 'border-l-4 border-l-slate-100'
+                  }`}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex flex-col items-center justify-center min-w-[40px]">
+                      <span className={`text-lg font-black leading-none ${isToday ? 'text-primary' : 'text-slate-700'}`}>{d.toString().padStart(2, '0')}</span>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase">{dayNames[new Date(year, month, d).getDay()]}</span>
+                    </div>
+                    
+                    <div>
+                      <div className="flex items-center gap-2">
+                        {workOccurred ? (
+                          <span className="text-[10px] font-black text-amber-600 bg-amber-100 px-2 py-0.5 rounded uppercase tracking-tighter">ÇALIŞMA VAR</span>
+                        ) : (
+                          <span className="text-[10px] font-black text-slate-400 bg-slate-100 px-2 py-0.5 rounded uppercase tracking-tighter">TATİL</span>
+                        )}
+                      </div>
+                      
+                      <div className="mt-1 flex gap-1">
+                        {dayChecklists.length > 0 ? (
+                          <span className="text-[10px] font-bold text-slate-500">{dayChecklists.length} Rapor</span>
+                        ) : workOccurred ? (
+                          <span className="text-[10px] font-bold text-red-600 animate-pulse">EKSİK RAPOR!</span>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); handleToggleWork(dateStr, workOccurred); }}
+                      className={`p-3 rounded-xl border transition-all ${
+                        workOccurred ? 'bg-amber-100 border-amber-200 text-amber-600' : 'bg-slate-50 border-slate-100 text-slate-300'
+                      }`}
+                    >
+                      <Construction size={18} />
+                    </button>
+                    <div className="p-2 text-primary">
+                      <Plus size={20} />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
