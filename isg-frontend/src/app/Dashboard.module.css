@@ -1,0 +1,48 @@
+.header {
+  margin-bottom: 3rem;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.statLabel {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.quickActions {
+  margin-bottom: 3rem;
+}
+
+.quickActions h2 {
+  margin-bottom: 1.5rem;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.recentActivity h3 {
+  margin-bottom: 1rem;
+}

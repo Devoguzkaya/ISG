@@ -1,0 +1,45 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  
+  --primary: #0f172a;      /* Slate 900 */
+  --primary-foreground: #ffffff;
+  
+  --secondary: #e2e8f0;    /* Slate 200 */
+  --secondary-foreground: #0f172a;
+  
+  --accent: #facc15;       /* Yellow 400 - Safety */
+  --accent-foreground: #0f172a;
+  
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  
+  --border: #e2e8f0;
+  --radius: 0.75rem;
+}
+
+@theme {
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--background)] text-[var(--foreground)];
+  }
+}
+
+.card-premium {
+  @apply bg-white rounded-[var(--radius)] border border-[var(--border)] shadow-sm hover:shadow-md transition-all duration-200 p-6;
+}
+
+.glass {
+  @apply bg-white/70 backdrop-blur-md border border-white/20;
+}

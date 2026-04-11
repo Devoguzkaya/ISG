@@ -1,0 +1,45 @@
+# 🕵️ GİZLİ BİLGİ NOTLARI VE SAVUNMA STRATEJİSİ (SADECE OĞUZHAN İÇİN)
+
+Bu dosya YEDAŞ veya OSGB ile paylaşılmayacak. Senin "arka plan" bilgin ve hazır cevapların için hazırlandı.
+
+---
+
+## 1. PERSONEL RİSK ANALİZİ (YEDAŞ Nereden Vurabilir?)
+
+### 🚨 Operatörlük Belgesi Riski (Kamyon Şoförleri)
+**Personel:** AHMET ÖNEŞ (1), HÜSAMETTİN PEKER (7)
+*   **Risk:** SGK girişleri "Kamyon Şoförü". Eğer sepetli vinci bunlar kullanıyorsa, ehliyetlerinde **"G Sınıfı"** veya **"İş Makinesi Operatörlük Belgesi"** olmak ZORUNDA. Sadece "E Sınıfı" yetmez.
+*   **Hazır Cevap:** "Arkadaşlarımızın operatörlük belgeleri mevcut, dosyaya ekledik." (Kontrol et, yoksa "Sadece aracı nakil ediyorlar, vinç kısmını operatör kullanıyor" diyerek zaman kazan, ama bu yalan sahada patlar).
+
+### 🚨 MYK / Ustalık Belgesi Riski (Elektrikçiler)
+**Personel:** ALİ KORKMAZ, EMRE CANLI, HÜSEYİN ÖNEŞ, YUNUS EMRE AKSU
+*   **Risk:** "Elektrik Tevzii İşçisi" olarak görünüyorlar. YEDAŞ, "Mesleki Yeterlilik Belgesi (MYK) 12UY0055-3" veya Ustalık Belgesi sorabilir.
+*   **Hazır Cevap:** "Başvurular yapıldı, sınav tarihleri bekleniyor. Geçici olarak 'Tehlikeli ve Çok Tehlikeli İşlerde Mesleki Eğitim' sertifikalarıyla çalışıyorlar." (Bu sertifikalar temel İSG eğitiminden farklıdır, Halk Eğitim'den alınır. Varsa bunu kullan).
+
+### 🚨 Yüksekte Çalışma Eğitimi (Tüm Ekip)
+*   **Risk:** Şoförler (Arif, Süleyman) dahil herkesin yüksekte çalışma sertifikası dosyada olmalı.
+*   **Hazır Cevap:** "Şoförler sepete çıkmıyor ama 'destek elemanı' olarak aşağıda bulundukları için ve acil durumlarda (sepet indirme) görev alabilecekleri için bu eğitimi aldırdık."
+
+---
+
+## 2. EKİP DAĞILIMI SAVUNMASI
+
+Ekipler ikiye bölündü (Boyabat ve Sinop/Ordu Köyü). YEDAŞ sorarsa:
+*   **Soru:** "Ekiplerin başında teknik sorumlu var mı?"
+*   **Cevap:** "Evet, Boyabat ekibinin başında Elektrik Mühendisimiz **Yusuf Can Ağveranlı**, Sinop ekibinin başında ise Teknikerimiz **Coşkun Deniz** bulunmaktadır. Ben de (İSG Sorumlusu olarak) gezici olarak her iki şantiyeyi denetliyorum."
+
+---
+
+## 3. KRİTİK CEVAP ANAHTARI (Sıkıştırırlarsa)
+
+*   **Soru:** "Araçların sepet izolasyon raporu nerede?"
+    *   **Cevap:** "Araç klasöründe 'Periyodik Kontrol Raporları'nın içinde mevcut." (Umarım vardır, yoksa "Firmadan istedik, kargoda/mailde" de).
+
+*   **Soru:** "Evlerde (şantiyede) yangın tüpü yok mu?"
+    *   **Cevap:** "Siparişleri verildi, bugün/yarın teslim alıp takacağız. Geçici olarak araçlardaki tüpleri kullanıyoruz." (Bu cevabı verirken gerçekten araçta tüp olsun).
+
+*   **Soru:** "Gece çalışması olacak mı?"
+    *   **Cevap:** "Şu an planlamamız gündüz çalışması üzerine. Gece çalışması gerekirse ayrıca izin alıp aydınlatma ve vardiya planını sunacağız." (Gece çalışması dersen ekstra bir ton evrak isterler, "Yok" de kurtul).
+
+*   **Soru:** "Neden 4 yıl ara verdin?" (Kişisel soru)
+    *   **Cevap:** "Yazılım sektöründe projeler geliştirdim, şimdi bu birikimi İSG süreçlerinin dijitalleşmesi ve takibinde kullanmak için sahaya döndüm." (Profesyonel ve havalı cevap).

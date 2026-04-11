@@ -1,0 +1,24 @@
+name: Deploy ISG Tracking System
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: 192.168.1.105 # Sunucu IP (Tailscale IP de olabilir)
+          username: oguzhan
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/oguzhan/REPOLAR/ISG
+            git pull origin main
+            # Backend ve Frontend Docker imajlarını build edip restart ediyoruz
+            docker-compose up -d --build

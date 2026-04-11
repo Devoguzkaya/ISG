@@ -1,0 +1,45 @@
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Database / Data
+*.db
+*.mv.db
+*.trace.db
+data/
+sql/
+
+# Backend (Java/Maven)
+isg-backend/target/
+isg-backend/*.class
+isg-backend/.mvn/
+isg-backend/.factorypath
+isg-backend/.project
+isg-backend/.settings/
+isg-backend/.classpath
+isg-backend/*.jar
+isg-backend/*.war
+
+# Frontend (Node/Next.js)
+isg-frontend/node_modules/
+isg-frontend/.next/
+isg-frontend/out/
+isg-frontend/build/
+isg-frontend/dist/
+isg-frontend/.env
+isg-frontend/.env.local
+isg-frontend/.env.*.local
+isg-frontend/*.log
+isg-frontend/npm-debug.log*
+isg-frontend/yarn-debug.log*
+isg-frontend/yarn-error.log*
+
+# Other
+.gemini/
+.agent/
+temp/
+tmp/
