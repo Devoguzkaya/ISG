@@ -17,6 +17,18 @@ public class VehicleService {
     }
 
     public Vehicle saveVehicle(Vehicle vehicle) {
+        if (vehicle.getId() != null) {
+            Vehicle existing = vehicleRepository.findById(vehicle.getId()).orElse(null);
+            if (existing != null) {
+                existing.setPlate(vehicle.getPlate());
+                existing.setBrandModel(vehicle.getBrandModel());
+                existing.setType(vehicle.getType());
+                existing.setDescription(vehicle.getDescription());
+                existing.setActive(vehicle.isActive());
+                existing.setDeactivationDate(vehicle.getDeactivationDate());
+                return vehicleRepository.save(existing);
+            }
+        }
         return vehicleRepository.save(vehicle);
     }
 

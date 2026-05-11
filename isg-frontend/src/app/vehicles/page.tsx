@@ -9,6 +9,7 @@ const VehiclesPage = () => {
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [formLoading, setFormLoading] = useState(false);
+  const [viewMode, setViewMode] = useState<'ACTIVE' | 'PASSIVE'>('ACTIVE');
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingVehicle, setEditingVehicle] = useState<any>(null);
@@ -35,6 +36,11 @@ const VehiclesPage = () => {
   useEffect(() => {
     fetchVehicles();
   }, []);
+
+  const filteredVehicles = vehicles.filter((v: any) => {
+    const isActuallyPassive = !v.active || (v.deactivationDate && new Date(v.deactivationDate) <= new Date());
+    return viewMode === 'ACTIVE' ? !isActuallyPassive : isActuallyPassive;
+  });
 
   const handleOpenAdd = () => {
     setEditingVehicle(null);
@@ -90,18 +96,42 @@ const VehiclesPage = () => {
 
   return (
     <div className="space-y-8 animate-fade pb-10">
-      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+      <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary">Vinçler ve Araçlar</h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-1">Saha operasyonlarında kullanılan aktif ve iade edilen araçlar.</p>
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary">
+            {viewMode === 'ACTIVE' ? 'Aktif Vinçler ve Araçlar' : 'İade Edilen Araçlar'}
+          </h1>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+            {viewMode === 'ACTIVE' 
+              ? 'Şu an sahada operasyonda olan aktif ekipmanlar.' 
+              : 'Kiralama süresi bitmiş veya iade edilmiş eski ekipmanlar.'}
+          </p>
         </div>
-        <button 
-          onClick={handleOpenAdd}
-          className="bg-primary text-white px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 shadow-xl active:scale-[0.98] transition-all"
-        >
-          <Plus size={20} />
-          Yeni Araç Ekle
-        </button>
+
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <div className="flex bg-white border border-border p-1 rounded-xl shadow-sm">
+            <button 
+              onClick={() => setViewMode('ACTIVE')}
+              className={`px-6 py-2.5 rounded-lg text-[10px] font-black tracking-widest uppercase transition-all ${viewMode === 'ACTIVE' ? 'bg-primary text-white shadow-md' : 'text-muted-foreground hover:bg-slate-50'}`}
+            >
+              AKTİF ARAÇLAR
+            </button>
+            <button 
+              onClick={() => setViewMode('PASSIVE')}
+              className={`px-6 py-2.5 rounded-lg text-[10px] font-black tracking-widest uppercase transition-all ${viewMode === 'PASSIVE' ? 'bg-red-500 text-white shadow-md' : 'text-muted-foreground hover:bg-slate-50'}`}
+            >
+              İADE EDİLENLER
+            </button>
+          </div>
+
+          <button 
+            onClick={handleOpenAdd}
+            className="bg-primary text-white px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 shadow-xl active:scale-[0.98] transition-all"
+          >
+            <Plus size={20} />
+            Yeni Araç Ekle
+          </button>
+        </div>
       </header>
 
       {loading ? (
@@ -110,7 +140,7 @@ const VehiclesPage = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          {vehicles.map((vehicle) => {
+          {filteredVehicles.map((vehicle) => {
             const isPassive = !vehicle.active || (vehicle.deactivationDate && new Date(vehicle.deactivationDate) <= new Date());
             
             return (
@@ -157,10 +187,22 @@ const VehiclesPage = () => {
             </div>
             <div className="space-y-1">
               <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Durum</label>
-              <select className="w-full p-4 bg-slate-50 border rounded-xl font-bold" value={formData.active + ""} onChange={e=>setFormData({...formData, active: e.target.value === 'true'})}>
-                <option value="true">Aktif</option>
-                <option value="false">Kiralama Bitti / İade</option>
-              </select>
+              <div className="grid grid-cols-2 gap-2">
+                <button 
+                  type="button"
+                  onClick={() => setFormData({...formData, active: true})}
+                  className={`p-4 rounded-xl font-bold text-sm transition-all ${formData.active ? 'bg-green-100 text-green-700 border-2 border-green-500' : 'bg-slate-50 text-slate-400 border border-transparent'}`}
+                >
+                  AKTİF
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => setFormData({...formData, active: false})}
+                  className={`p-4 rounded-xl font-bold text-sm transition-all ${!formData.active ? 'bg-red-100 text-red-700 border-2 border-red-500' : 'bg-slate-50 text-slate-400 border border-transparent'}`}
+                >
+                  İADE EDİLDİ
+                </button>
+              </div>
             </div>
           </div>
           <div className="space-y-1">
