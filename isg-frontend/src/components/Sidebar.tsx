@@ -26,7 +26,7 @@ const Sidebar = ({ onClose }: { onClose?: () => void }) => {
   ];
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-primary text-white flex flex-col p-6 z-50">
+    <aside className="h-screen w-64 bg-primary text-white flex flex-col p-6 shrink-0 sticky top-0">
       <div className="mb-10 pb-6 border-b border-white/10">
         <h1 className="text-2xl font-black tracking-tighter text-accent italic">
           ISG PRO

@@ -23,10 +23,10 @@ export default function Shell({ children }: { children: React.ReactNode }) {
         />
       )}
 
-      {/* Sidebar Container */}
+      {/* Sidebar Container — desktop: flex item, mobile: fixed overlay */}
       <div className={`
-        fixed inset-y-0 left-0 z-50 transform lg:relative lg:translate-x-0 transition-transform duration-300 ease-in-out
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        fixed inset-y-0 left-0 z-50 lg:static lg:inset-auto lg:z-auto transform lg:transform-none transition-transform duration-300 ease-in-out
+        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         <Sidebar onClose={closeSidebar} />
       </div>

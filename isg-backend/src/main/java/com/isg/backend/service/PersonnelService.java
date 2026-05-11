@@ -23,6 +23,19 @@ public class PersonnelService {
     }
 
     public Personnel savePersonnel(Personnel personnel) {
+        if (personnel.getId() != null) {
+            Personnel existing = personnelRepository.findById(personnel.getId()).orElse(null);
+            if (existing != null) {
+                // Update only editable fields, preserve others like validFrom
+                existing.setFullName(personnel.getFullName());
+                existing.setRole(personnel.getRole());
+                existing.setPhone(personnel.getPhone());
+                existing.setTcNo(personnel.getTcNo());
+                existing.setActive(personnel.isActive());
+                existing.setValidTo(personnel.getValidTo());
+                return personnelRepository.save(existing);
+            }
+        }
         return personnelRepository.save(personnel);
     }
 
