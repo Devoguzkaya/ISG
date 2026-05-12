@@ -20,11 +20,20 @@ public class DailyNote {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
+    private String author;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @Column
     private String category; // e.g., "Genel", "Önemli", "Tehlike"
+
+    @OneToMany(mappedBy = "note", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<NoteComment> comments;
 
     @PrePersist
     protected void onCreate() {

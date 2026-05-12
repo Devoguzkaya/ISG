@@ -23,4 +23,9 @@ public class DailyNoteController {
     public DailyNote createNote(@RequestBody DailyNote note) {
         return dailyNoteService.saveNote(note);
     }
+
+    @PostMapping("/{id}/comments")
+    public DailyNote addComment(@PathVariable Long id, @RequestBody com.isg.backend.model.NoteComment comment) {
+        return dailyNoteService.addComment(id, comment);
+    }
 }

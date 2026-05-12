@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DailyNoteRepository extends JpaRepository<DailyNote, Long> {
+    java.util.List<DailyNote> findAllByOrderByCreatedAtDesc();
 }
