@@ -144,9 +144,9 @@ const VehiclesPage = () => {
             const isPassive = !vehicle.active || (vehicle.deactivationDate && new Date(vehicle.deactivationDate) <= new Date());
             
             return (
-              <div key={vehicle.id} className={`card-premium relative p-4 sm:p-6 transition-all ${isPassive ? 'opacity-70 bg-slate-50 grayscale-[0.5]' : ''}`}>
-                <div className="flex items-start gap-4 sm:gap-5">
-                  <div className={`p-3 sm:p-4 rounded-2xl flex-shrink-0 ${isPassive ? 'bg-slate-200 text-slate-400' : 'bg-slate-100 text-blue-600'}`}>
+              <div key={vehicle.id} className={`card-premium relative p-4 sm:p-6 transition-all ${isPassive ? 'opacity-70 bg-muted grayscale-[0.5]' : ''}`}>
+                <div className="flex items-start justify-between mb-6">
+                  <div className={`p-3 sm:p-4 rounded-2xl flex-shrink-0 ${isPassive ? 'bg-secondary text-muted-foreground' : 'bg-primary/5 text-primary'}`}>
                     <Truck size={28} />
                   </div>
                   <div className="flex-grow min-w-0">
@@ -160,7 +160,7 @@ const VehiclesPage = () => {
                         </span>
                       )}
                     </div>
-                    <h3 className={`text-lg sm:text-xl font-black truncate ${isPassive ? 'text-slate-500' : 'text-primary'}`}>{vehicle.plate}</h3>
+                    <h3 className={`text-lg sm:text-xl font-black truncate ${isPassive ? 'text-muted-foreground' : 'text-foreground'}`}>{vehicle.plate}</h3>
                     <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{vehicle.brandModel}</p>
                   </div>
                 </div>

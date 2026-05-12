@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Shell from "@/components/Shell";
 
+import { ThemeProvider } from "@/components/ThemeProvider";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -18,9 +20,11 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body className={`${inter.className} bg-[var(--background)]`}>
-        <Shell>
-          {children}
-        </Shell>
+        <ThemeProvider>
+          <Shell>
+            {children}
+          </Shell>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -105,7 +105,7 @@ const CalendarPage = () => {
   const renderCells = () => {
     const cells = [];
     for (let i = 0; i < firstDay; i++) {
-      cells.push(<div key={`empty-${i}`} className="h-28 sm:h-36 border-b border-r border-slate-100 bg-slate-50/30"></div>);
+      cells.push(<div key={`empty-${i}`} className="h-28 sm:h-36 border-b border-r border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-900/30"></div>);
     }
     
     for (let d = 1; d <= days; d++) {
@@ -122,8 +122,8 @@ const CalendarPage = () => {
       cells.push(
         <div 
           key={d} 
-          className={`h-28 sm:h-36 border-b border-r border-slate-100 p-2 sm:p-3 transition-all relative group flex flex-col ${
-            isCriticalMissing ? 'bg-red-50/50' : isCompliant ? 'bg-green-50/30' : ''
+          className={`h-28 sm:h-36 border-b border-r border-slate-100 dark:border-slate-800 p-2 sm:p-3 transition-all relative group flex flex-col ${
+            isCriticalMissing ? 'bg-red-50/50 dark:bg-red-900/20' : isCompliant ? 'bg-green-50/30 dark:bg-green-900/20' : ''
           } ${isToday ? 'ring-2 ring-primary ring-inset z-10' : ''}`}
         >
           <div className="flex items-center justify-between mb-1">
@@ -205,9 +205,9 @@ const CalendarPage = () => {
         <div className="space-y-6">
           {/* Desktop Grid View */}
           <div className="hidden lg:block card-premium p-0 overflow-hidden border-border bg-white shadow-xl">
-            <div className="grid grid-cols-7 border-b border-slate-100 bg-slate-50/50">
+            <div className="grid grid-cols-7 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
               {dayNames.map(d => (
-                <div key={d} className="py-4 text-center text-[10px] font-black uppercase tracking-widest text-slate-400 border-r border-slate-100 italic">
+                <div key={d} className="py-4 text-center text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-300 border-r border-slate-100 dark:border-slate-800 italic">
                   {d}
                 </div>
               ))}
@@ -233,9 +233,9 @@ const CalendarPage = () => {
                   key={d} 
                   onClick={() => handleDateClick(d)}
                   className={`card-premium p-4 flex items-center justify-between gap-4 transition-all active:scale-[0.98] ${
-                    isCriticalMissing ? 'border-l-4 border-l-red-600 bg-red-50/30' : 
-                    isCompliant ? 'border-l-4 border-l-green-600 bg-green-50/30' : 
-                    isToday ? 'ring-2 ring-primary ring-inset' : 'border-l-4 border-l-slate-100'
+                    isCriticalMissing ? 'border-l-4 border-l-red-600 bg-red-50/30 dark:bg-red-900/20' : 
+                    isCompliant ? 'border-l-4 border-l-green-600 bg-green-50/30 dark:bg-green-900/20' : 
+                    isToday ? 'ring-2 ring-primary ring-inset' : 'border-l-4 border-l-slate-100 dark:border-l-slate-800'
                   }`}
                 >
                   <div className="flex items-center gap-4">

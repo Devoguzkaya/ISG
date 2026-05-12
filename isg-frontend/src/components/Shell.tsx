@@ -24,21 +24,18 @@ export default function Shell({ children }: { children: React.ReactNode }) {
       )}
 
       {/* Sidebar Container — desktop: flex item, mobile: fixed overlay */}
-      <div className={`
-        fixed inset-y-0 left-0 z-50 lg:static lg:inset-auto lg:z-auto transform lg:transform-none transition-transform duration-300 ease-in-out
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}>
+      <div className={`fixed inset-y-0 left-0 w-64 bg-background shadow-2xl transition-transform duration-300 transform z-50 lg:static lg:inset-auto lg:z-auto lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <Sidebar onClose={closeSidebar} />
       </div>
 
       {/* Main Content Area */}
       <div className="flex-grow flex flex-col min-w-0">
         {/* Mobile Header */}
-        <header className="lg:hidden flex items-center justify-between p-4 bg-primary text-white sticky top-0 z-30 shadow-md">
+        <header className="lg:hidden flex items-center justify-between p-4 bg-background text-foreground border-b border-border sticky top-0 z-30 shadow-sm transition-colors duration-300">
           <div className="flex items-center gap-3">
             <button 
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+              className="p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-lg transition-colors"
             >
               <Menu size={24} />
             </button>

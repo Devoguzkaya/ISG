@@ -70,7 +70,7 @@ const ChecklistsPage = () => {
           <div className="hidden lg:block card-premium overflow-hidden p-0 bg-white shadow-xl border-slate-200">
             <div className="overflow-x-auto">
               <table className="w-full text-left font-sans">
-                <thead className="bg-slate-50/50 border-b border-slate-100">
+                <thead className="bg-secondary/50 border-b border-border">
                   <tr>
                     <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400 text-center">Tarih</th>
                     <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Araç / Lokasyon</th>
@@ -80,16 +80,16 @@ const ChecklistsPage = () => {
                     <th className="px-6 py-5"></th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-50">
+                <tbody className="divide-y divide-border">
                   {checklists.map((item) => {
                     const status = getOverallStatus(item);
                     const isSiteAudit = item.type === 'SITE_AUDIT';
                     return (
-                      <tr key={item.id} className="hover:bg-slate-50/50 transition-colors group">
+                      <tr key={item.id} className="hover:bg-secondary/30 transition-colors group">
                         <td className="px-6 py-6">
                           <div className="flex flex-col items-center">
-                            <span className="text-sm font-black text-slate-700">{new Date(item.createdAt).toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit' })}</span>
-                            <span className="text-[10px] font-bold text-slate-400">{new Date(item.createdAt).getFullYear()}</span>
+                            <span className="text-sm font-black text-foreground">{new Date(item.createdAt).toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit' })}</span>
+                            <span className="text-[10px] font-bold text-muted-foreground">{new Date(item.createdAt).getFullYear()}</span>
                           </div>
                         </td>
                         <td className="px-6 py-6">
@@ -109,8 +109,8 @@ const ChecklistsPage = () => {
                                )}
                             </div>
                             <div className="flex items-center gap-2">
-                              <MapPin size={12} className="text-slate-300" />
-                              <span className="text-xs text-slate-500 font-medium">{item.siteLocation || 'Konum bilgisi yok'}</span>
+                              <MapPin size={12} className="text-muted-foreground/40" />
+                              <span className="text-xs text-muted-foreground font-medium">{item.siteLocation || 'Konum bilgisi yok'}</span>
                               <button 
                                 onClick={() => setSelectedForMap(item)} 
                                 className="text-[10px] font-black text-primary hover:underline uppercase tracking-tighter ml-2"
@@ -129,7 +129,7 @@ const ChecklistsPage = () => {
                                 </span>
                               ))
                             ) : (
-                              <span className="text-xs text-slate-600 font-bold">{item.personnel?.fullName}</span>
+                              <span className="text-xs text-foreground font-bold">{item.personnel?.fullName}</span>
                             )}
                           </div>
                         </td>
@@ -177,9 +177,9 @@ const ChecklistsPage = () => {
                   </div>
 
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-slate-50 flex flex-col items-center justify-center border border-slate-100">
+                    <div className="w-12 h-12 rounded-xl bg-secondary flex flex-col items-center justify-center border border-border">
                       <span className="text-xs font-black text-primary">{new Date(item.createdAt).toLocaleDateString('tr-TR', { day: '2-digit' })}</span>
-                      <span className="text-[8px] font-bold text-slate-400 uppercase">{new Date(item.createdAt).toLocaleDateString('tr-TR', { month: 'short' })}</span>
+                      <span className="text-[8px] font-bold text-muted-foreground uppercase">{new Date(item.createdAt).toLocaleDateString('tr-TR', { month: 'short' })}</span>
                     </div>
                     <div>
                       <h3 className="font-black text-primary truncate max-w-[200px]">

@@ -41,11 +41,17 @@ export const checklistsApi = {
 export const notesApi = {
   getAll: () => api.get('/notes'),
   create: (data: any) => api.post('/notes', data),
+  addComment: (noteId: number, data: any) => api.post(`/notes/${noteId}/comments`, data),
 };
 
 export const workStatusApi = {
   getAll: () => api.get('/work-status'),
   toggle: (date: string, workOccurred: boolean) => api.post('/work-status', { date, workOccurred })
+};
+
+export const settingsApi = {
+  getAll: () => api.get('/settings'),
+  update: (data: Record<string, string>) => api.post('/settings', data),
 };
 
 export default api;

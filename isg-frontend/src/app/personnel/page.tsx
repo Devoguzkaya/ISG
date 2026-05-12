@@ -153,27 +153,27 @@ const PersonnelPage = () => {
           {filteredStaff.map((person) => {
              const isResigned = !person.active || (person.validTo && new Date(person.validTo) <= new Date());
              return (
-              <div key={person.id} className={`card-premium group relative p-5 ${isResigned ? 'opacity-60 bg-slate-50' : ''}`}>
+              <div key={person.id} className={`card-premium group relative p-5 ${isResigned ? 'opacity-60 bg-muted' : ''}`}>
                 <div className="flex items-start justify-between mb-6">
                   <div className="flex items-center gap-4">
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center font-black text-xl flex-shrink-0 ${isResigned ? 'bg-slate-200 text-slate-400' : 'bg-slate-100 text-primary'}`}>
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center font-black text-xl flex-shrink-0 ${isResigned ? 'bg-muted-foreground/20 text-muted-foreground' : 'bg-primary/10 text-primary'}`}>
                       {person.fullName.charAt(0)}
                     </div>
-                    <div>
-                      <h3 className={`font-black tracking-tight ${isResigned ? 'text-slate-500' : 'text-primary'}`}>{person.fullName}</h3>
-                      <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{person.role}</p>
-                    </div>
+                     <div>
+                        <h3 className={`font-black tracking-tight ${isResigned ? 'text-muted-foreground' : 'text-foreground'}`}>{person.fullName}</h3>
+                        <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">{person.role}</p>
+                     </div>
                   </div>
                   {isResigned && <UserX size={20} className="text-red-400" />}
                 </div>
 
-                <div className="space-y-3 mb-6 font-medium text-sm text-slate-600">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-slate-50 rounded-lg text-slate-400">
-                      <Phone size={14} />
-                    </div>
-                    <span className="font-bold">{person.phone || '-'}</span>
-                  </div>
+                 <div className="space-y-3 mb-6 font-medium text-sm text-muted-foreground">
+                   <div className="flex items-center gap-3">
+                     <div className="p-2 bg-secondary rounded-lg text-muted-foreground">
+                       <Phone size={14} />
+                     </div>
+                     <span className="font-bold">{person.phone || '-'}</span>
+                   </div>
                    {person.validTo && (
                     <div className="flex items-center gap-3 text-red-500 bg-red-50 p-2 rounded-lg">
                       <Calendar size={14} />

@@ -85,7 +85,7 @@ const PersonnelDetailPage = ({ params }: { params: Promise<{ id: string }> }) =>
   if (!person) return <div className="text-center py-20 font-bold text-red-500">Personel bulunamadı.</div>;
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8 animate-fade pb-20">
+    <div className="max-w-[1550px] mx-auto space-y-8 animate-fade pb-20">
       <header className="flex items-center gap-4">
         <Link href="/personnel" className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
           <ChevronLeft size={24} />

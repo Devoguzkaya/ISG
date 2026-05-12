@@ -123,7 +123,8 @@ const ChecklistForm = () => {
           if (!v.active) return false;
           if (v.deactivationDate) {
             const deactiveDate = new Date(v.deactivationDate);
-            if (deactiveDate < now) return false;
+            // Deaktivasyon tarihi BUGÜN veya GEÇMİŞSE gösterme
+            if (deactiveDate <= now) return false;
           }
           return true;
         });
@@ -210,14 +211,14 @@ const ChecklistForm = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto pb-20 animate-fade">
+    <div className="max-w-[1550px] mx-auto pb-20 animate-fade">
       <header className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3 sm:gap-4">
-          <Link href={dateParam ? "/calendar" : "/checklists"} className="p-2 sm:p-2.5 bg-white border border-slate-100 hover:bg-slate-50 rounded-xl transition-all shadow-sm">
+          <Link href={dateParam ? "/calendar" : "/checklists"} className="p-2 sm:p-2.5 bg-background border border-border hover:bg-secondary rounded-xl transition-all shadow-sm">
             <ChevronLeft size={20} className="sm:w-6 sm:h-6" />
           </Link>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary leading-tight">Yeni İSG Formu</h1>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground leading-tight">Yeni İSG Formu</h1>
             <p className="text-[10px] sm:text-xs text-muted-foreground font-black uppercase tracking-widest leading-none mt-1">
               {dateParam ? `${new Date(dateParam).toLocaleDateString('tr-TR')} Tarihli Kayıt` : 'Sahada Hızlı Denetim Formu'}
             </p>
@@ -227,7 +228,7 @@ const ChecklistForm = () => {
 
       <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
         <div className="card-premium">
-          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-4">Form Tipi Seçiniz</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground block mb-4">Form Tipi Seçiniz</label>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {Object.entries(CHECKLIST_TYPES).map(([key, label]) => (
               <button
@@ -237,31 +238,28 @@ const ChecklistForm = () => {
                 className={`p-4 rounded-2xl text-left border-2 transition-all active:scale-[0.98] ${
                   formData.type === key 
                   ? 'border-primary bg-primary/5 shadow-inner' 
-                  : 'border-transparent bg-white hover:border-slate-100 shadow-sm'
+                  : 'border-transparent bg-background hover:border-border shadow-sm'
                 }`}
               >
-                <p className={`text-[9px] font-black uppercase tracking-widest ${formData.type === key ? 'text-primary' : 'text-slate-300'}`}>
-                  {key}
-                </p>
-                <p className={`text-xs font-black ${formData.type === key ? 'text-primary' : 'text-slate-600'}`}>
+                <h3 className={`text-sm font-black mt-1 ${formData.type === key ? 'text-foreground' : 'text-muted-foreground/70'}`}>
                   {label}
-                </p>
+                </h3>
               </button>
             ))}
           </div>
         </div>
 
         {(formData.type !== 'RISK_ANALYSIS' && formData.type !== 'WORK_PERMIT' && formData.type !== 'CONTRACTOR_AUDIT') && (
-          <div className="card-premium space-y-6 shadow-xl border-slate-100">
+          <div className="card-premium space-y-6 shadow-xl border-border">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* 1. Tarih (Template'de varsa veya varsayılan) */}
               <div className="space-y-1">
-                <label className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                   <Calendar size={14} /> Denetim Tarihi
                 </label>
                 <input 
                   type="date"
-                  className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm font-bold"
+                  className="w-full p-4 bg-secondary border border-border rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm font-bold"
                   value={formData.metadata['checkDate'] || new Date().toISOString().split('T')[0]}
                   onChange={e => setFormData({...formData, metadata: {...formData.metadata, checkDate: e.target.value}})}
                 />
@@ -269,12 +267,12 @@ const ChecklistForm = () => {
 
               {/* 2. Denetçi */}
               <div className="space-y-1">
-                <label className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                   <User size={14} /> Denetçi
                 </label>
                 <select 
                   required
-                  className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm font-bold appearance-none"
+                  className="w-full p-4 bg-secondary border border-border rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm font-bold appearance-none"
                   value={formData.personnelId}
                   onChange={e => setFormData({...formData, personnelId: e.target.value})}
                 >
@@ -287,12 +285,12 @@ const ChecklistForm = () => {
 
               {/* 3. Araç (Ana) */}
               <div className="space-y-1">
-                <label className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                   <Truck size={14} /> Araç (Ana)
                 </label>
                 <select 
                   disabled={formData.type === 'SITE_AUDIT'}
-                  className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm font-bold disabled:opacity-50 appearance-none"
+                  className="w-full p-4 bg-secondary border border-border rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm font-bold disabled:opacity-50 appearance-none"
                   value={formData.vehicleId}
                   onChange={e => setFormData({...formData, vehicleId: e.target.value})}
                 >
@@ -305,14 +303,14 @@ const ChecklistForm = () => {
 
               {/* 4. Mevki */}
               <div className="space-y-1">
-                <label className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                   <MapPin size={14} /> Mevki
                 </label>
                 <input 
                   required
                   type="text"
                   placeholder="Örn: Sinop OSB"
-                  className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm font-bold"
+                  className="w-full p-4 bg-secondary border border-border rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm font-bold"
                   value={formData.site}
                   onChange={e => setFormData({...formData, site: e.target.value})}
                 />
@@ -320,13 +318,13 @@ const ChecklistForm = () => {
 
               {/* 5. Yapılan İş */}
               <div className="space-y-1">
-                <label className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                   <ClipboardCheck size={14} /> Yapılan İş
                 </label>
                 <input 
                   type="text"
                   placeholder="Örn: Hat Bakımı"
-                  className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm font-bold"
+                  className="w-full p-4 bg-secondary border border-border rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm font-bold"
                   value={formData.metadata['workTitle'] || ''}
                   onChange={e => setFormData({...formData, metadata: {...formData.metadata, workTitle: e.target.value}})}
                 />
@@ -343,7 +341,7 @@ const ChecklistForm = () => {
                   className={`w-full p-4 rounded-xl border flex items-center justify-center gap-2 font-black text-[10px] tracking-widest transition-all shadow-sm ${
                     formData.latitude 
                     ? 'bg-green-600 border-green-600 text-white' 
-                    : 'bg-white border-slate-200 text-slate-400 hover:border-primary/30 active:scale-95'
+                    : 'bg-background border-border text-muted-foreground hover:border-primary/30 active:scale-95'
                   }`}
                 >
                   <MapPin size={14} />
@@ -354,7 +352,7 @@ const ChecklistForm = () => {
 
             {/* Harita Önizleme */}
             {formData.latitude && (
-              <div className="mt-4 rounded-2xl overflow-hidden border border-slate-200 h-48 w-full animate-in fade-in slide-in-from-top-4 duration-500">
+              <div className="mt-4 rounded-2xl overflow-hidden border border-border h-48 w-full animate-in fade-in slide-in-from-top-4 duration-500">
                 <iframe 
                   width="100%" 
                   height="100%" 
@@ -371,13 +369,13 @@ const ChecklistForm = () => {
 
         {/* Contractor Control Specific Header (Boxy Table Style from Image) */}
         {formData.type === 'CONTRACTOR_AUDIT' && (
-          <div className="card-premium !p-0 overflow-hidden shadow-xl border-slate-200">
-            <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-slate-200">
+          <div className="card-premium !p-0 overflow-hidden shadow-xl border-border">
+            <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-border">
               {/* Sol Taraf (Denetlenen Bölümü) */}
-              <div className="divide-y divide-slate-200">
+              <div className="divide-y divide-border">
                 <div className="flex items-stretch min-h-[45px]">
-                  <div className="w-[180px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Yüklenici/Altyüklenici:</label>
+                  <div className="w-[180px] bg-secondary p-3 flex items-center border-r border-border">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Yüklenici/Altyüklenici:</label>
                   </div>
                   <input 
                     type="text"
@@ -387,8 +385,8 @@ const ChecklistForm = () => {
                   />
                 </div>
                 <div className="flex items-stretch min-h-[45px]">
-                  <div className="w-[180px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Proje Adı:</label>
+                  <div className="w-[180px] bg-secondary p-3 flex items-center border-r border-border">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Proje Adı:</label>
                   </div>
                   <input 
                     type="text"
@@ -398,8 +396,8 @@ const ChecklistForm = () => {
                   />
                 </div>
                 <div className="flex items-stretch min-h-[45px]">
-                  <div className="w-[180px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">İş/İşletmesi:</label>
+                  <div className="w-[180px] bg-secondary p-3 flex items-center border-r border-border">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">İş/İşletmesi:</label>
                   </div>
                   <input 
                     type="text"
@@ -411,10 +409,10 @@ const ChecklistForm = () => {
               </div>
 
               {/* Sağ Taraf (Yetkili ve Zaman) */}
-              <div className="divide-y divide-slate-200">
+              <div className="divide-y divide-border">
                 <div className="flex items-stretch min-h-[45px]">
-                  <div className="w-[180px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Yetkili Adı Soyadı:</label>
+                  <div className="w-[180px] bg-secondary p-3 flex items-center border-r border-border">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Yetkili Adı Soyadı:</label>
                   </div>
                   <input 
                     type="text"
@@ -424,16 +422,16 @@ const ChecklistForm = () => {
                   />
                 </div>
                 <div className="flex items-stretch min-h-[45px]">
-                  <div className="w-[180px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">İmzası:</label>
+                  <div className="w-[180px] bg-secondary p-3 flex items-center border-r border-border">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">İmzası:</label>
                   </div>
                   <div className="flex-1 px-4 flex items-center">
-                    <span className="text-[9px] italic text-slate-300 font-bold uppercase">Dijital Onay Sistemi</span>
+                    <span className="text-[9px] italic text-muted-foreground font-bold uppercase">Dijital Onay Sistemi</span>
                   </div>
                 </div>
                 <div className="flex items-stretch min-h-[45px]">
-                  <div className="w-[180px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Tarih-Saat:</label>
+                  <div className="w-[180px] bg-secondary p-3 flex items-center border-r border-border">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Tarih-Saat:</label>
                   </div>
                   <input 
                     type="datetime-local"
@@ -449,40 +447,40 @@ const ChecklistForm = () => {
 
         {/* Work Permit Specific Header */}
         {formData.type === 'WORK_PERMIT' && (
-          <div className="card-premium space-y-4 shadow-xl border-slate-100">
+          <div className="card-premium space-y-4 shadow-xl border-border">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 border-b border-slate-50 pb-2 sm:pb-0 sm:border-0">
-                <label className="text-[10px] font-black uppercase tracking-widest text-primary whitespace-nowrap min-w-[140px]">İzin Başlama Tarihi:</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground whitespace-nowrap min-w-[140px]">İzin Başlama Tarihi:</label>
                 <input 
                   type="date"
-                  className="flex-1 bg-transparent border-b-2 border-slate-100 focus:border-primary outline-none py-1 text-sm font-bold transition-all"
+                  className="flex-1 bg-transparent border-b-2 border-border focus:border-primary outline-none py-1 text-sm font-bold transition-all"
                   value={formData.metadata['permitStartDate'] || ''}
                   onChange={e => setFormData({...formData, metadata: {...formData.metadata, permitStartDate: e.target.value}})}
                 />
               </div>
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 border-b border-slate-50 pb-2 sm:pb-0 sm:border-0">
-                <label className="text-[10px] font-black uppercase tracking-widest text-primary whitespace-nowrap min-w-[140px]">İzin Bitiş Tarihi:</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground whitespace-nowrap min-w-[140px]">İzin Bitiş Tarihi:</label>
                 <input 
                   type="date"
-                  className="flex-1 bg-transparent border-b-2 border-slate-100 focus:border-primary outline-none py-1 text-sm font-bold transition-all"
+                  className="flex-1 bg-transparent border-b-2 border-border focus:border-primary outline-none py-1 text-sm font-bold transition-all"
                   value={formData.metadata['permitEndDate'] || ''}
                   onChange={e => setFormData({...formData, metadata: {...formData.metadata, permitEndDate: e.target.value}})}
                 />
               </div>
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 border-b border-slate-50 pb-2 sm:pb-0 sm:border-0">
-                <label className="text-[10px] font-black uppercase tracking-widest text-primary whitespace-nowrap min-w-[140px]">Yüklenici Firma Adı:</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground whitespace-nowrap min-w-[140px]">Yüklenici Firma Adı:</label>
                 <input 
                   type="text"
-                  className="flex-1 bg-transparent border-b-2 border-slate-100 focus:border-primary outline-none py-1 text-sm font-bold transition-all"
+                  className="flex-1 bg-transparent border-b-2 border-border focus:border-primary outline-none py-1 text-sm font-bold transition-all"
                   value={formData.metadata['contractorName'] || ''}
                   onChange={e => setFormData({...formData, metadata: {...formData.metadata, contractorName: e.target.value}})}
                 />
               </div>
               <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-primary whitespace-nowrap min-w-[140px]">Çalışmanın Yapılacağı Lokasyon:</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground whitespace-nowrap min-w-[140px]">Çalışmanın Yapılacağı Lokasyon:</label>
                 <input 
                   type="text"
-                  className="flex-1 bg-transparent border-b-2 border-slate-100 focus:border-primary outline-none py-1 text-sm font-bold transition-all"
+                  className="flex-1 bg-transparent border-b-2 border-border focus:border-primary outline-none py-1 text-sm font-bold transition-all"
                   value={formData.metadata['workLocation'] || ''}
                   onChange={e => setFormData({...formData, metadata: {...formData.metadata, workLocation: e.target.value}})}
                 />
@@ -493,40 +491,40 @@ const ChecklistForm = () => {
 
         {/* Risk Analysis Specific Header */}
         {formData.type === 'RISK_ANALYSIS' && (
-          <div className="card-premium space-y-4 shadow-xl border-slate-100">
+          <div className="card-premium space-y-4 shadow-xl border-border">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 border-b border-slate-50 pb-2 sm:pb-0 sm:border-0">
-                <label className="text-[10px] font-black uppercase tracking-widest text-primary whitespace-nowrap min-w-[140px]">YAPILACAK İŞİN TANIMI:</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground whitespace-nowrap min-w-[140px]">YAPILACAK İŞİN TANIMI:</label>
                 <input 
                   type="text"
-                  className="flex-1 bg-transparent border-b-2 border-slate-100 focus:border-primary outline-none py-1 text-sm font-bold transition-all"
+                  className="flex-1 bg-transparent border-b-2 border-border focus:border-primary outline-none py-1 text-sm font-bold transition-all"
                   value={formData.metadata['workTitle'] || ''}
                   onChange={e => setFormData({...formData, metadata: {...formData.metadata, workTitle: e.target.value}})}
                 />
               </div>
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 border-b border-slate-50 pb-2 sm:pb-0 sm:border-0">
-                <label className="text-[10px] font-black uppercase tracking-widest text-primary whitespace-nowrap min-w-[180px]">İŞİN BAŞLAMA TARİHİ VE SAATİ:</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground whitespace-nowrap min-w-[180px]">İŞİN BAŞLAMA TARİHİ VE SAATİ:</label>
                 <input 
                   type="datetime-local"
-                  className="flex-1 bg-transparent border-b-2 border-slate-100 focus:border-primary outline-none py-1 text-sm font-bold transition-all"
+                  className="flex-1 bg-transparent border-b-2 border-border focus:border-primary outline-none py-1 text-sm font-bold transition-all"
                   value={formData.metadata['startTime'] || ''}
                   onChange={e => setFormData({...formData, metadata: {...formData.metadata, startTime: e.target.value}})}
                 />
               </div>
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 border-b border-slate-50 pb-2 sm:pb-0 sm:border-0">
-                <label className="text-[10px] font-black uppercase tracking-widest text-primary whitespace-nowrap min-w-[140px]">ÇALIŞMA YAPILACAK YER:</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground whitespace-nowrap min-w-[140px]">ÇALIŞMA YAPILACAK YER:</label>
                 <input 
                   type="text"
-                  className="flex-1 bg-transparent border-b-2 border-slate-100 focus:border-primary outline-none py-1 text-sm font-bold transition-all"
+                  className="flex-1 bg-transparent border-b-2 border-border focus:border-primary outline-none py-1 text-sm font-bold transition-all"
                   value={formData.metadata['location'] || ''}
                   onChange={e => setFormData({...formData, metadata: {...formData.metadata, location: e.target.value}})}
                 />
               </div>
               <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-primary whitespace-nowrap min-w-[180px]">İŞİN SÜRESİ:</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground whitespace-nowrap min-w-[180px]">İŞİN SÜRESİ:</label>
                 <input 
                   type="text"
-                  className="flex-1 bg-transparent border-b-2 border-slate-100 focus:border-primary outline-none py-1 text-sm font-bold transition-all"
+                  className="flex-1 bg-transparent border-b-2 border-border focus:border-primary outline-none py-1 text-sm font-bold transition-all"
                   value={formData.metadata['duration'] || ''}
                   onChange={e => setFormData({...formData, metadata: {...formData.metadata, duration: e.target.value}})}
                 />
@@ -537,13 +535,13 @@ const ChecklistForm = () => {
 
         {/* Saha Denetim Formu (F.567) Specific Header */}
         {formData.type === 'SITE_AUDIT' && (
-          <div className="card-premium !p-0 overflow-hidden shadow-xl border-slate-200">
-            <div className="divide-y divide-slate-200">
+          <div className="card-premium !p-0 overflow-hidden shadow-xl border-border">
+            <div className="divide-y divide-border">
               {/* Row 1: Firma ve Zaman */}
-              <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-slate-200">
+              <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-border">
                 <div className="flex items-stretch min-h-[50px]">
-                  <div className="w-[180px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Denetlenen Firma Adı:</label>
+                  <div className="w-[180px] bg-secondary p-3 flex items-center border-r border-border">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Denetlenen Firma Adı:</label>
                   </div>
                   <div className="flex-1 px-4 flex items-center gap-4">
                     {['YEDAŞ', 'ÇAEHAŞ', 'CYK'].map(f => (
@@ -555,21 +553,21 @@ const ChecklistForm = () => {
                           checked={formData.metadata['firmName'] === f}
                           onChange={() => setFormData({...formData, metadata: {...formData.metadata, firmName: f}})}
                         />
-                        <span className="text-[10px] font-bold text-slate-600">{f}</span>
+                        <span className="text-[10px] font-bold text-muted-foreground">{f}</span>
                       </label>
                     ))}
                     <input 
                       type="text" 
                       placeholder="FİRMA ADI..." 
-                      className="flex-1 bg-transparent border-b border-slate-100 text-[10px] font-bold outline-none focus:border-primary"
+                      className="flex-1 bg-transparent border-b border-border text-[10px] font-bold outline-none focus:border-primary"
                       value={formData.metadata['firmNameOther'] || ''}
                       onChange={e => setFormData({...formData, metadata: {...formData.metadata, firmNameOther: e.target.value}})}
                     />
                   </div>
                 </div>
                 <div className="flex items-stretch min-h-[50px]">
-                  <div className="w-[180px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Denetleme Tarihi / Saati:</label>
+                  <div className="w-[180px] bg-secondary p-3 flex items-center border-r border-border">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Denetleme Tarihi / Saati:</label>
                   </div>
                   <div className="flex-1 px-4 flex items-center gap-2">
                     <input 
@@ -589,10 +587,10 @@ const ChecklistForm = () => {
               </div>
 
               {/* Row 2: Bölge ve Kesme Protokolü */}
-              <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-slate-200">
+              <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-border">
                 <div className="flex items-stretch min-h-[50px]">
-                  <div className="w-[180px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Denetlenen Bölge:</label>
+                  <div className="w-[180px] bg-secondary p-3 flex items-center border-r border-border">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Denetlenen Bölge:</label>
                   </div>
                   <div className="flex-1 px-4 flex items-center gap-3 overflow-x-auto custom-scrollbar">
                     {['AMASYA', 'ÇORUM', 'SİNOP', 'SAMSUN', 'ORDU'].map(r => (
@@ -604,14 +602,14 @@ const ChecklistForm = () => {
                           checked={formData.metadata['region'] === r}
                           onChange={() => setFormData({...formData, metadata: {...formData.metadata, region: r}})}
                         />
-                        <span className="text-[10px] font-bold text-slate-600">{r}</span>
+                        <span className="text-[10px] font-bold text-muted-foreground">{r}</span>
                       </label>
                     ))}
                   </div>
                 </div>
                 <div className="flex items-stretch min-h-[50px]">
-                  <div className="w-[180px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Kesme Verme Protokolü Varmı?</label>
+                  <div className="w-[180px] bg-secondary p-3 flex items-center border-r border-border">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Kesme Verme Protokolü Varmı?</label>
                   </div>
                   <div className="flex-1 px-4 flex items-center gap-4">
                     {['E', 'H', 'G'].map(v => (
@@ -623,13 +621,13 @@ const ChecklistForm = () => {
                           checked={formData.metadata['isolationProtocol'] === v}
                           onChange={() => setFormData({...formData, metadata: {...formData.metadata, isolationProtocol: v}})}
                         />
-                        <span className="text-[10px] font-bold text-slate-600">{v === 'E' ? 'EVET' : v === 'H' ? 'HAYIR' : 'G.DEĞİL'}</span>
+                        <span className="text-[10px] font-bold text-muted-foreground">{v === 'E' ? 'EVET' : v === 'H' ? 'HAYIR' : 'G.DEĞİL'}</span>
                       </label>
                     ))}
                     <input 
                       type="text" 
                       placeholder="SAP NO..." 
-                      className="flex-1 bg-transparent border-b border-slate-100 text-[10px] font-bold outline-none focus:border-primary"
+                      className="flex-1 bg-transparent border-b border-border text-[10px] font-bold outline-none focus:border-primary"
                       value={formData.metadata['sapNo'] || ''}
                       onChange={e => setFormData({...formData, metadata: {...formData.metadata, sapNo: e.target.value}})}
                     />
@@ -638,11 +636,11 @@ const ChecklistForm = () => {
               </div>
 
               {/* Row 3: İşletme, Plaka ve Ekip Türü */}
-              <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-slate-200">
-                <div className="grid grid-cols-1 divide-y divide-slate-200">
+              <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-border">
+                <div className="grid grid-cols-1 divide-y divide-border">
                   <div className="flex items-stretch min-h-[50px]">
-                    <div className="w-[180px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">İşletme Adı:</label>
+                    <div className="w-[180px] bg-secondary p-3 flex items-center border-r border-border">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">İşletme Adı:</label>
                     </div>
                     <input 
                       type="text"
@@ -652,8 +650,8 @@ const ChecklistForm = () => {
                     />
                   </div>
                   <div className="flex items-stretch min-h-[50px]">
-                    <div className="w-[180px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Araç Plakası:</label>
+                    <div className="w-[180px] bg-secondary p-3 flex items-center border-r border-border">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Araç Plakası:</label>
                     </div>
                     <input 
                       type="text"
@@ -664,8 +662,8 @@ const ChecklistForm = () => {
                   </div>
                 </div>
                 <div className="flex items-stretch">
-                  <div className="w-[180px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Ekip Türü:</label>
+                  <div className="w-[180px] bg-secondary p-3 flex items-center border-r border-border">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Ekip Türü:</label>
                   </div>
                   <div className="flex-1 p-3 grid grid-cols-3 gap-2">
                     {['ARIZA', 'BAKIM', 'TESİS', 'KESME-AÇMA', 'OKUMA', 'KAÇAK', 'DAĞ. TEK', 'CBS', 'AĞAÇ KESME'].map(t => (
@@ -677,13 +675,13 @@ const ChecklistForm = () => {
                           checked={formData.metadata['teamType'] === t}
                           onChange={() => setFormData({...formData, metadata: {...formData.metadata, teamType: t}})}
                         />
-                        <span className="text-[9px] font-bold text-slate-500">{t}</span>
+                        <span className="text-[9px] font-bold text-muted-foreground">{t}</span>
                       </label>
                     ))}
                     <input 
                       type="text" 
                       placeholder="DİĞER..." 
-                      className="col-span-3 bg-transparent border-b border-slate-100 text-[10px] font-bold outline-none focus:border-primary"
+                      className="col-span-3 bg-transparent border-b border-border text-[10px] font-bold outline-none focus:border-primary"
                       value={formData.metadata['teamTypeOther'] || ''}
                       onChange={e => setFormData({...formData, metadata: {...formData.metadata, teamTypeOther: e.target.value}})}
                     />
@@ -692,11 +690,11 @@ const ChecklistForm = () => {
               </div>
 
               {/* Row 4: Mevki, Yapılan İş ve Vardiya */}
-              <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-slate-200">
-                <div className="grid grid-cols-1 divide-y divide-slate-200">
+              <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-border">
+                <div className="grid grid-cols-1 divide-y divide-border">
                   <div className="flex items-stretch min-h-[50px]">
-                    <div className="w-[180px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Çalışma Yapılan Mevki:</label>
+                    <div className="w-[180px] bg-secondary p-3 flex items-center border-r border-border">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Çalışma Yapılan Mevki:</label>
                     </div>
                     <input 
                       type="text"
@@ -706,8 +704,8 @@ const ChecklistForm = () => {
                     />
                   </div>
                   <div className="flex items-stretch min-h-[50px]">
-                    <div className="w-[180px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Yapılan İş:</label>
+                    <div className="w-[180px] bg-secondary p-3 flex items-center border-r border-border">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Yapılan İş:</label>
                     </div>
                     <input 
                       type="text"
@@ -718,8 +716,8 @@ const ChecklistForm = () => {
                   </div>
                 </div>
                 <div className="flex items-stretch">
-                  <div className="w-[180px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Vardiya Çizelgesine Uyuluyor mu?</label>
+                  <div className="w-[180px] bg-secondary p-3 flex items-center border-r border-border">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Vardiya Çizelgesine Uyuluyor mu?</label>
                   </div>
                   <div className="flex-1 px-4 flex items-center gap-6">
                     {['E', 'H', 'G'].map(v => (
@@ -731,7 +729,7 @@ const ChecklistForm = () => {
                           checked={formData.metadata['shiftCompliance'] === v}
                           onChange={() => setFormData({...formData, metadata: {...formData.metadata, shiftCompliance: v}})}
                         />
-                        <span className="text-[11px] font-bold text-slate-600">{v === 'E' ? 'EVET' : v === 'H' ? 'HAYIR' : 'G.DEĞİL'}</span>
+                        <span className="text-[11px] font-bold text-muted-foreground">{v === 'E' ? 'EVET' : v === 'H' ? 'HAYIR' : 'G.DEĞİL'}</span>
                       </label>
                     ))}
                   </div>
@@ -739,10 +737,10 @@ const ChecklistForm = () => {
               </div>
 
               {/* Personnel Slots */}
-              <div className="grid grid-cols-1 divide-y divide-slate-200">
+              <div className="grid grid-cols-1 divide-y divide-border">
                 <div className="flex items-stretch min-h-[50px]">
-                  <div className="w-[280px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Denetlenen Ekip Şefi Adı Soyadı:</label>
+                  <div className="w-[280px] bg-secondary p-3 flex items-center border-r border-border">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Denetlenen Ekip Şefi Adı Soyadı:</label>
                   </div>
                   <input 
                     type="text"
@@ -751,11 +749,11 @@ const ChecklistForm = () => {
                     onChange={e => setFormData({...formData, metadata: {...formData.metadata, teamLeader: e.target.value}})}
                   />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-slate-200">
+                <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-border">
                   {[1, 2, 3, 4].map(num => (
-                    <div key={num} className="flex items-stretch min-h-[50px] border-b border-slate-200 last:border-0">
-                      <div className="w-[180px] bg-slate-50 p-3 flex items-center border-r border-slate-200">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">{num}- Personel Ad-Soyad:</label>
+                    <div key={num} className="flex items-stretch min-h-[50px] border-b border-border last:border-0">
+                      <div className="w-[180px] bg-secondary p-3 flex items-center border-r border-border">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{num}- Personel Ad-Soyad:</label>
                       </div>
                       <input 
                         type="text"
@@ -773,22 +771,22 @@ const ChecklistForm = () => {
 
         {/* Other Remaining Custom Fields (Header'da olmayanlar) */}
         {customFields.filter(f => !['checkDate', 'workTitle', 'inspector', 'location', 'plate', 'startTime', 'duration', 'permitStartDate', 'permitEndDate', 'contractorName', 'workLocation', 'contractorCompany', 'projectName', 'workOperation', 'authorizedPerson', 'checkDateTime', 'firmName', 'region', 'operationName', 'plateNumber', 'checkTime', 'sapNo', 'teamLeader', 'teamType', 'workDescription'].includes(f.id)).length > 0 && (
-          <div className="card-premium grid grid-cols-1 sm:grid-cols-2 gap-6 shadow-xl border-slate-100">
+          <div className="card-premium grid grid-cols-1 sm:grid-cols-2 gap-6 shadow-xl border-border">
             {customFields.filter(f => !['checkDate', 'workTitle', 'inspector', 'location', 'plate', 'startTime', 'duration', 'permitStartDate', 'permitEndDate', 'contractorName', 'workLocation', 'contractorCompany', 'projectName', 'workOperation', 'authorizedPerson', 'checkDateTime', 'firmName', 'region', 'operationName', 'plateNumber', 'checkTime', 'sapNo', 'teamLeader', 'teamType', 'workDescription'].includes(f.id)).map(field => (
               <div key={field.id} className={`${field.type === 'textarea' ? 'sm:col-span-2' : ''} space-y-1`}>
-                <label className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                    {field.label}
                 </label>
                 {field.type === 'textarea' ? (
                   <textarea
-                    className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm font-bold min-h-[100px]"
+                    className="w-full p-4 bg-secondary border border-border rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm font-bold min-h-[100px]"
                     value={formData.metadata[field.id] || ''}
                     onChange={e => setFormData({...formData, metadata: {...formData.metadata, [field.id]: e.target.value}})}
                   />
                 ) : (
                   <input
                     type={field.type}
-                    className="w-full p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm font-bold"
+                    className="w-full p-4 bg-secondary border border-border rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm font-bold"
                     value={formData.metadata[field.id] || ''}
                     onChange={e => setFormData({...formData, metadata: {...formData.metadata, [field.id]: e.target.value}})}
                   />
@@ -801,23 +799,23 @@ const ChecklistForm = () => {
         {formData.type === 'SITE_AUDIT' && (
           <div className="space-y-6">
             <div className="card-premium space-y-4 shadow-xl">
-              <h3 className="text-[10px] font-black uppercase text-primary tracking-widest border-b border-slate-50 pb-3">Denetlenen Ekip ve Araçlar</h3>
+              <h3 className="text-[10px] font-black uppercase text-accent tracking-widest border-b border-slate-50 pb-3">Denetlenen Ekip ve Araçlar</h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
                 {/* Personnel Multi-select */}
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Personel Seçimi</label>
+                  <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest italic">Personel Seçimi</label>
                   <div className="max-h-48 overflow-y-auto space-y-1 pr-2 custom-scrollbar">
                     {staff.map(p => (
                       <div 
                         key={p.id} 
                         onClick={() => toggleAuditPersonnel(p)}
                         className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all active:scale-[0.98] ${
-                          formData.personnelAudits.some(a => a.id === p.id) ? 'bg-primary border border-primary text-white shadow-md shadow-primary/20' : 'bg-slate-50 border border-transparent hover:border-slate-100'
+                          formData.personnelAudits.some(a => a.id === p.id) ? 'bg-primary border border-primary text-primary-foreground shadow-md shadow-primary/20' : 'bg-secondary border border-transparent hover:border-border'
                         }`}
                       >
                         <div className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
-                          formData.personnelAudits.some(a => a.id === p.id) ? 'bg-white border-white' : 'bg-white border-slate-300'
+                          formData.personnelAudits.some(a => a.id === p.id) ? 'bg-background border-white' : 'bg-background border-slate-300'
                         }`}>
                           {formData.personnelAudits.some(a => a.id === p.id) && <CheckCircle className="text-primary" size={12} />}
                         </div>
@@ -829,23 +827,23 @@ const ChecklistForm = () => {
 
                 {/* Vehicle Multi-select */}
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Araç/Ekipman Seçimi</label>
+                  <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest italic">Araç/Ekipman Seçimi</label>
                   <div className="max-h-48 overflow-y-auto space-y-1 pr-2 custom-scrollbar">
                     {vehicles.map(v => (
                       <div 
                         key={v.id} 
                         onClick={() => toggleInvolvedVehicle(v.id.toString())}
                         className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all active:scale-[0.98] ${
-                          formData.involvedVehicles.includes(v.id.toString()) ? 'bg-blue-600 border border-blue-600 text-white shadow-md shadow-blue-200' : 'bg-slate-50 border border-transparent hover:border-slate-100'
+                          formData.involvedVehicles.includes(v.id.toString()) ? 'bg-blue-600 border border-blue-600 text-white shadow-md shadow-blue-200' : 'bg-secondary border border-transparent hover:border-border'
                         }`}
                       >
                         <div className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
-                          formData.involvedVehicles.includes(v.id.toString()) ? 'bg-white border-white' : 'bg-white border-slate-300'
+                          formData.involvedVehicles.includes(v.id.toString()) ? 'bg-background border-white' : 'bg-background border-slate-300'
                         }`}>
                           {formData.involvedVehicles.includes(v.id.toString()) && <CheckCircle className="text-blue-600" size={12} />}
                         </div>
                         <span className="text-xs font-bold font-mono leading-none">{v.plate}</span>
-                        <span className={`text-[10px] font-bold uppercase tracking-tight ${formData.involvedVehicles.includes(v.id.toString()) ? 'text-blue-100' : 'text-slate-400'}`}>{v.brandModel}</span>
+                        <span className={`text-[10px] font-bold uppercase tracking-tight ${formData.involvedVehicles.includes(v.id.toString()) ? 'text-blue-100' : 'text-muted-foreground'}`}>{v.brandModel}</span>
                       </div>
                     ))}
                   </div>
@@ -855,12 +853,12 @@ const ChecklistForm = () => {
 
             {formData.personnelAudits.length > 0 && (
               <div className="card-premium space-y-4 shadow-xl">
-                <h3 className="text-[10px] font-black uppercase text-primary tracking-widest border-b border-slate-50 pb-3">Ekip Denetim Durumu</h3>
-                <div className="divide-y divide-slate-100">
+                <h3 className="text-[10px] font-black uppercase text-accent tracking-widest border-b border-border pb-3">Ekip Denetim Durumu</h3>
+                <div className="divide-y divide-border">
                   {formData.personnelAudits.map(person => (
                     <div key={person.id} className="py-5 space-y-4 first:pt-0 last:pb-0">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <span className="font-black text-primary tracking-tight">{person.name}</span>
+                        <span className="font-black text-foreground tracking-tight">{person.name}</span>
                         <div className="flex items-center gap-2">
                           <button
                             type="button"
@@ -868,7 +866,7 @@ const ChecklistForm = () => {
                             className={`flex-1 sm:flex-none px-4 py-3 rounded-xl text-[10px] font-black uppercase transition-all flex items-center justify-center gap-2 border shadow-sm ${
                               person.isCompliant 
                               ? 'bg-green-600 border-green-600 text-white' 
-                              : 'bg-white border-slate-100 text-slate-300'
+                              : 'bg-background border-border text-muted-foreground'
                             }`}
                           >
                             <CheckCircle size={16} /> <span className="sm:hidden">UYGUN</span> <span className="hidden sm:inline">KURALLARA UYGUN</span>
@@ -879,7 +877,7 @@ const ChecklistForm = () => {
                             className={`flex-1 sm:flex-none px-4 py-3 rounded-xl text-[10px] font-black uppercase transition-all flex items-center justify-center gap-2 border shadow-sm ${
                               !person.isCompliant 
                               ? 'bg-red-600 border-red-600 text-white' 
-                              : 'bg-white border-slate-100 text-slate-300'
+                              : 'bg-background border-border text-muted-foreground'
                             }`}
                           >
                             <AlertTriangle size={16} /> <span className="sm:hidden">KUSURLU</span> <span className="hidden sm:inline">KUSURLU BULUNDU</span>
@@ -887,7 +885,7 @@ const ChecklistForm = () => {
                         </div>
                       </div>
                       <textarea
-                        className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl text-xs font-bold placeholder:italic placeholder:font-normal placeholder:text-slate-300 outline-none focus:ring-2 focus:ring-primary/10 transition-all shadow-inner"
+                        className="w-full p-4 bg-secondary border border-border rounded-2xl text-xs font-bold placeholder:italic placeholder:font-normal placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary/10 transition-all shadow-inner"
                         placeholder={`${person.name} için denetim notu (kusur var ise belitiniz)...`}
                         value={person.remarks}
                         onChange={(e) => updateAuditRemarks(person.id, e.target.value)}
@@ -903,25 +901,25 @@ const ChecklistForm = () => {
 
         {currentSections.map((section) => (
           <div key={section.section} className="space-y-2">
-            <h2 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] px-2">{section.section}</h2>
+            <h2 className="text-[10px] font-black uppercase text-muted-foreground tracking-[0.2em] px-2">{section.section}</h2>
             
             {formData.type === 'SITE_AUDIT' ? (
               section.section === "EKİPSEL MALZEME KONTROLÜ" ? (
-                <div className="card-premium overflow-hidden !p-0 shadow-xl border-slate-100">
+                <div className="card-premium overflow-hidden !p-0 shadow-xl border-border">
                   <div className="overflow-x-auto custom-scrollbar">
                     <table className="w-full text-left border-collapse">
-                      <thead className="bg-slate-50/80">
+                      <thead className="bg-secondary/80">
                         <tr>
-                          <th className="py-3 px-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-200">EKİPSEL MALZEME ADI</th>
-                          <th className="py-3 px-1 text-[7px] font-black uppercase text-slate-400 text-center border-l border-b border-slate-200 w-16">Mevcut?</th>
-                          <th className="py-3 px-1 text-[7px] font-black uppercase text-slate-400 text-center border-b border-slate-200 w-16">Gerekli?</th>
-                          <th className="py-3 px-1 text-[7px] font-black uppercase text-slate-400 text-center border-b border-slate-200 w-16">Kull.?</th>
+                          <th className="py-3 px-4 text-[9px] font-black uppercase tracking-widest text-muted-foreground border-b border-border">EKİPSEL MALZEME ADI</th>
+                          <th className="py-3 px-1 text-[7px] font-black uppercase text-muted-foreground text-center border-l border-b border-border w-16">Mevcut?</th>
+                          <th className="py-3 px-1 text-[7px] font-black uppercase text-muted-foreground text-center border-b border-border w-16">Gerekli?</th>
+                          <th className="py-3 px-1 text-[7px] font-black uppercase text-muted-foreground text-center border-b border-border w-16">Kull.?</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100">
+                      <tbody className="divide-y divide-border">
                         {section.items.map((q) => (
-                          <tr key={q.id} className="hover:bg-slate-50/50 transition-colors">
-                            <td className="py-3 px-4 text-[10px] font-bold text-slate-700 uppercase">{q.text}</td>
+                          <tr key={q.id} className="hover:bg-secondary/50 transition-colors">
+                            <td className="py-3 px-4 text-[10px] font-bold text-foreground uppercase">{q.text}</td>
                             {['present', 'required', 'used'].map(type => {
                               const key = `${q.id}_${type}`;
                               const val = formData.results[key];
@@ -931,12 +929,12 @@ const ChecklistForm = () => {
                                     <button 
                                       type="button"
                                       onClick={() => setFormData(prev => ({...prev, results: {...prev.results, [key]: val === 'OK' ? undefined as any : 'OK'}}))}
-                                      className={`w-full py-1 rounded text-[8px] font-black transition-all ${val === 'OK' ? 'bg-green-600 text-white shadow-sm' : 'bg-slate-100 text-slate-300'}`}
+                                      className={`w-full py-1 rounded text-[8px] font-black transition-all ${val === 'OK' ? 'bg-green-600 text-white shadow-sm' : 'bg-muted text-muted-foreground'}`}
                                     >E</button>
                                     <button 
                                       type="button"
                                       onClick={() => setFormData(prev => ({...prev, results: {...prev.results, [key]: val === 'NOT_OK' ? undefined as any : 'NOT_OK'}}))}
-                                      className={`w-full py-1 rounded text-[8px] font-black transition-all ${val === 'NOT_OK' ? 'bg-red-600 text-white shadow-sm' : 'bg-slate-100 text-slate-300'}`}
+                                      className={`w-full py-1 rounded text-[8px] font-black transition-all ${val === 'NOT_OK' ? 'bg-red-600 text-white shadow-sm' : 'bg-muted text-muted-foreground'}`}
                                     >H</button>
                                   </div>
                                 </td>
@@ -950,33 +948,33 @@ const ChecklistForm = () => {
                 </div>
               ) : section.section === "KİŞİSEL MALZEME KONTROLÜ" ? (
                 <div className="space-y-6">
-                  <div className="card-premium overflow-hidden !p-0 shadow-xl border-slate-100">
+                  <div className="card-premium overflow-hidden !p-0 shadow-xl border-border">
                     <div className="overflow-x-auto custom-scrollbar">
                       <table className="w-full text-left border-collapse min-w-[1000px]">
-                        <thead className="bg-slate-50/80">
+                        <thead className="bg-secondary/80">
                           <tr>
-                            <th className="py-3 px-4 text-[9px] font-black uppercase tracking-widest text-slate-400 border-b border-slate-200">KİŞİSEL MALZEME ADI</th>
+                            <th className="py-3 px-4 text-[9px] font-black uppercase tracking-widest text-muted-foreground border-b border-border">KİŞİSEL MALZEME ADI</th>
                             {[1, 2, 3, 4].map(num => (
-                              <th key={num} colSpan={3} className="py-3 px-1 text-[7px] font-black uppercase text-slate-500 text-center border-l border-b border-slate-200 bg-slate-100/50">
+                              <th key={num} colSpan={3} className="py-3 px-1 text-[7px] font-black uppercase text-muted-foreground text-center border-l border-b border-border bg-muted/50">
                                 PERSONEL-{num}
                               </th>
                             ))}
                           </tr>
-                          <tr className="bg-slate-50/30">
-                            <th className="border-b border-slate-100"></th>
+                          <tr className="bg-secondary/30">
+                            <th className="border-b border-border"></th>
                             {[1, 2, 3, 4].map(num => (
                               <React.Fragment key={num}>
-                                <th className="py-2 px-1 text-[6px] font-black uppercase text-slate-400 text-center border-l border-b border-slate-100 w-10">Mev.</th>
-                                <th className="py-2 px-1 text-[6px] font-black uppercase text-slate-400 text-center border-b border-slate-100 w-10">Ger.</th>
-                                <th className="py-2 px-1 text-[6px] font-black uppercase text-slate-400 text-center border-b border-slate-100 w-10">Kul.</th>
+                                <th className="py-2 px-1 text-[6px] font-black uppercase text-muted-foreground text-center border-l border-b border-border w-10">Mev.</th>
+                                <th className="py-2 px-1 text-[6px] font-black uppercase text-muted-foreground text-center border-b border-border w-10">Ger.</th>
+                                <th className="py-2 px-1 text-[6px] font-black uppercase text-muted-foreground text-center border-b border-border w-10">Kul.</th>
                               </React.Fragment>
                             ))}
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100">
+                        <tbody className="divide-y divide-border">
                           {section.items.map((q) => (
-                            <tr key={q.id} className="hover:bg-slate-50/50 transition-colors">
-                              <td className="py-2 px-4 text-[10px] font-bold text-slate-700 uppercase">{q.text}</td>
+                            <tr key={q.id} className="hover:bg-secondary/50 transition-colors">
+                              <td className="py-2 px-4 text-[10px] font-bold text-foreground uppercase">{q.text}</td>
                               {[1, 2, 3, 4].map(pNum => (
                                 <React.Fragment key={pNum}>
                                   {['present', 'required', 'used'].map(type => {
@@ -988,12 +986,12 @@ const ChecklistForm = () => {
                                           <button 
                                             type="button"
                                             onClick={() => setFormData(prev => ({...prev, results: {...prev.results, [key]: val === 'OK' ? undefined as any : 'OK'}}))}
-                                            className={`w-full py-0.5 rounded text-[7px] font-black transition-all ${val === 'OK' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-300'}`}
+                                            className={`w-full py-0.5 rounded text-[7px] font-black transition-all ${val === 'OK' ? 'bg-blue-600 text-white' : 'bg-muted text-muted-foreground'}`}
                                           >E</button>
                                           <button 
                                             type="button"
                                             onClick={() => setFormData(prev => ({...prev, results: {...prev.results, [key]: val === 'NOT_OK' ? undefined as any : 'NOT_OK'}}))}
-                                            className={`w-full py-0.5 rounded text-[7px] font-black transition-all ${val === 'NOT_OK' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-300'}`}
+                                            className={`w-full py-0.5 rounded text-[7px] font-black transition-all ${val === 'NOT_OK' ? 'bg-red-600 text-white' : 'bg-muted text-muted-foreground'}`}
                                           >H</button>
                                         </div>
                                       </td>
@@ -1012,15 +1010,15 @@ const ChecklistForm = () => {
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       {['ARAÇ DÜZENİ UYGUN MU?', 'İSG MALZEME DÜZENİ UYGUN MU?', 'MOBİL KAMERA ÇALIŞIYOR MU?'].map(label => (
-                        <div key={label} className="card-premium flex items-center justify-between !p-4 border-slate-100 shadow-lg">
-                          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{label}</span>
+                        <div key={label} className="card-premium flex items-center justify-between !p-4 border-border shadow-lg">
+                          <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">{label}</span>
                           <div className="flex gap-2">
                             {['E', 'H'].map(v => (
                               <button 
                                 key={v}
                                 type="button"
                                 onClick={() => setFormData(prev => ({...prev, metadata: {...prev.metadata, [label]: prev.metadata[label] === v ? undefined as any : v}}))}
-                                className={`px-5 py-2 rounded-xl text-[10px] font-black border transition-all ${formData.metadata[label] === v ? 'bg-primary border-primary text-white shadow-md' : 'bg-slate-50 border-slate-100 text-slate-300'}`}
+                                className={`px-5 py-2 rounded-xl text-[10px] font-black border transition-all ${formData.metadata[label] === v ? 'bg-primary border-primary text-primary-foreground shadow-md' : 'bg-secondary border-border text-muted-foreground'}`}
                               >{v}</button>
                             ))}
                           </div>
@@ -1028,22 +1026,22 @@ const ChecklistForm = () => {
                       ))}
                     </div>
 
-                    <div className="card-premium overflow-hidden !p-0 shadow-xl border-slate-100">
-                      <div className="bg-slate-50 p-2 text-center border-b border-slate-100">
-                        <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">EĞİTİM KONTROLLERİ</span>
+                    <div className="card-premium overflow-hidden !p-0 shadow-xl border-border">
+                      <div className="bg-secondary p-2 text-center border-b border-border">
+                        <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">EĞİTİM KONTROLLERİ</span>
                       </div>
                       <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse min-w-[800px]">
                           <thead>
-                            <tr className="bg-slate-100/30">
-                              <th className="py-3 px-4 text-[9px] font-black text-slate-400">Eğitim Türü</th>
-                              {[1, 2, 3, 4].map(n => <th key={n} className="py-3 px-4 text-[9px] font-black text-slate-400 text-center border-l border-slate-200">Personel-{n}</th>)}
+                            <tr className="bg-muted/30">
+                              <th className="py-3 px-4 text-[9px] font-black text-muted-foreground">Eğitim Türü</th>
+                              {[1, 2, 3, 4].map(n => <th key={n} className="py-3 px-4 text-[9px] font-black text-muted-foreground text-center border-l border-border">Personel-{n}</th>)}
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-slate-100 bg-white">
+                          <tbody className="divide-y divide-border bg-background">
                             {['İŞBAŞI VE YÜKSEKTE ÇALIŞMA EĞİTİMİ VAR MI?', 'MESLEKİ EĞİTİMİ VAR MI?', 'İSG EĞİTİMİ VAR MI?'].map(label => (
-                              <tr key={label} className="hover:bg-slate-50/30 transition-colors">
-                                <td className="py-3 px-4 text-[9px] font-bold text-slate-600 uppercase">{label}</td>
+                              <tr key={label} className="hover:bg-secondary/30 transition-colors">
+                                <td className="py-3 px-4 text-[9px] font-bold text-muted-foreground uppercase">{label}</td>
                                 {[1, 2, 3, 4].map(n => (
                                   <td key={n} className="py-2 px-4 border-l border-slate-50">
                                     <div className="flex justify-center gap-1">
@@ -1052,7 +1050,7 @@ const ChecklistForm = () => {
                                           key={v}
                                           type="button"
                                           onClick={() => setFormData(prev => ({...prev, metadata: {...prev.metadata, [`${label}_p${n}`]: prev.metadata[`${label}_p${n}`] === v ? undefined as any : v}}))}
-                                          className={`w-8 h-8 rounded-lg text-[9px] font-black border transition-all ${formData.metadata[`${label}_p${n}`] === v ? 'bg-blue-600 border-blue-600 text-white shadow-sm' : 'bg-slate-50 border-slate-100 text-slate-300'}`}
+                                          className={`w-8 h-8 rounded-lg text-[9px] font-black border transition-all ${formData.metadata[`${label}_p${n}`] === v ? 'bg-blue-600 border-blue-600 text-white shadow-sm' : 'bg-secondary border-border text-muted-foreground'}`}
                                         >{v}</button>
                                       ))}
                                     </div>
@@ -1067,28 +1065,28 @@ const ChecklistForm = () => {
                   </div>
                 </div>
               ) : (
-                <div className="p-10 text-center bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
-                  <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Bu bölüm için veri bulunamadı.</p>
+                <div className="p-10 text-center bg-secondary rounded-2xl border-2 border-dashed border-border">
+                  <p className="text-xs font-black text-muted-foreground uppercase tracking-widest">Bu bölüm için veri bulunamadı.</p>
                 </div>
               )
             ) : formData.type === 'CONTRACTOR_AUDIT' ? (
-              <div className="card-premium overflow-hidden !p-0 shadow-xl border-slate-100">
+              <div className="card-premium overflow-hidden !p-0 shadow-xl border-border">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
-                    <thead className="bg-slate-50/50">
+                    <thead className="bg-secondary/50">
                       <tr>
-                        <th className="py-3 px-4 text-[9px] font-black uppercase tracking-widest text-slate-400 w-12 text-center">No</th>
-                        <th className="py-3 px-4 text-[9px] font-black uppercase tracking-widest text-slate-400">Kontrol Kriterleri</th>
-                        <th className="py-3 px-4 text-[9px] font-black uppercase tracking-widest text-slate-400 w-48 text-center">Mevcut Durum</th>
-                        <th className="py-3 px-4 text-[9px] font-black uppercase tracking-widest text-slate-400 w-64">Açıklama</th>
+                        <th className="py-3 px-4 text-[9px] font-black uppercase tracking-widest text-muted-foreground w-12 text-center">No</th>
+                        <th className="py-3 px-4 text-[9px] font-black uppercase tracking-widest text-muted-foreground">Kontrol Kriterleri</th>
+                        <th className="py-3 px-4 text-[9px] font-black uppercase tracking-widest text-muted-foreground w-48 text-center">Mevcut Durum</th>
+                        <th className="py-3 px-4 text-[9px] font-black uppercase tracking-widest text-muted-foreground w-64">Açıklama</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-border">
                       {section.items.map((q, idx) => (
-                        <tr key={q.id} className="hover:bg-slate-50/30 transition-colors">
-                          <td className="py-4 px-4 text-xs font-bold text-slate-400 text-center">{idx + 1}</td>
+                        <tr key={q.id} className="hover:bg-secondary/30 transition-colors">
+                          <td className="py-4 px-4 text-xs font-bold text-muted-foreground text-center">{idx + 1}</td>
                           <td className="py-4 px-4">
-                            <p className="text-xs font-bold text-slate-700 leading-relaxed">{q.text}</p>
+                            <p className="text-xs font-bold text-foreground leading-relaxed">{q.text}</p>
                           </td>
                           <td className="py-4 px-4">
                             <div className="flex items-center justify-center gap-2">
@@ -1098,7 +1096,7 @@ const ChecklistForm = () => {
                                 className={`px-4 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest border transition-all active:scale-95 ${
                                   formData.results[q.id] === 'OK' 
                                     ? 'bg-green-600 border-green-600 text-white shadow-md' 
-                                    : 'bg-white border-slate-100 text-slate-300 hover:border-green-200'
+                                    : 'bg-background border-border text-muted-foreground hover:border-green-200'
                                 }`}
                               >
                                 VAR
@@ -1109,7 +1107,7 @@ const ChecklistForm = () => {
                                 className={`px-4 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest border transition-all active:scale-95 ${
                                   formData.results[q.id] === 'NOT_OK' 
                                     ? 'bg-red-600 border-red-600 text-white shadow-md' 
-                                    : 'bg-white border-slate-100 text-slate-300 hover:border-red-200'
+                                    : 'bg-background border-border text-muted-foreground hover:border-red-200'
                                 }`}
                               >
                                 YOK
@@ -1120,7 +1118,7 @@ const ChecklistForm = () => {
                             <input 
                               type="text"
                               placeholder="Not ekle..."
-                              className="w-full bg-slate-50 border border-slate-100 rounded-lg px-3 py-2 text-[11px] font-bold outline-none focus:border-primary transition-all shadow-inner"
+                              className="w-full bg-secondary border border-border rounded-lg px-3 py-2 text-[11px] font-bold outline-none focus:border-primary transition-all shadow-inner"
                               value={formData.remarks_map?.[q.id] || ''}
                               onChange={e => {
                                 const newRemarks = { ... (formData.remarks_map || {}), [q.id]: e.target.value };
@@ -1135,7 +1133,7 @@ const ChecklistForm = () => {
                 </div>
               </div>
             ) : (section.section === "YAPILACAK İŞ" || section.section === "ÇALIŞMA ORTAMINDAKİ TEHLİKE veya RİSKLER") ? (
-              <div className="card-premium space-y-4 shadow-xl border-slate-100">
+              <div className="card-premium space-y-4 shadow-xl border-border">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                   {section.items.map((q) => (
                     <button
@@ -1144,12 +1142,12 @@ const ChecklistForm = () => {
                       onClick={() => handleResultChange(q.id, formData.results[q.id] === 'OK' ? undefined as any : 'OK')}
                       className={`flex items-center gap-2 p-3 rounded-xl border-2 transition-all active:scale-95 text-left ${
                         formData.results[q.id] === 'OK'
-                          ? 'bg-primary border-primary text-white shadow-md'
-                          : 'bg-white border-slate-50 text-slate-500 hover:border-slate-100'
+                          ? 'bg-primary border-primary text-primary-foreground shadow-md'
+                          : 'bg-background border-slate-50 text-muted-foreground hover:border-border'
                       }`}
                     >
                       <div className={`w-4 h-4 rounded-full border flex items-center justify-center flex-shrink-0 ${
-                        formData.results[q.id] === 'OK' ? 'bg-white border-white text-primary' : 'bg-slate-100 border-slate-200'
+                        formData.results[q.id] === 'OK' ? 'bg-background border-white text-primary' : 'bg-muted border-border'
                       }`}>
                         {formData.results[q.id] === 'OK' && <CheckCircle size={12} />}
                       </div>
@@ -1159,12 +1157,12 @@ const ChecklistForm = () => {
                 </div>
 
                 {section.section === "ÇALIŞMA ORTAMINDAKİ TEHLİKE veya RİSKLER" && formData.type === 'RISK_ANALYSIS' && (
-                  <div className="pt-4 border-t border-slate-100 space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-primary block leading-tight">
+                  <div className="pt-4 border-t border-border space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground block leading-tight">
                       ÇALIŞMA ORTAMINDAKİ DİĞER TEHLİKE/RİSKLER VE ÖNLEMLERİ:
                     </label>
                     <textarea
-                      className="w-full h-24 p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-4 focus:ring-primary/5 transition-all resize-none text-sm font-bold shadow-inner"
+                      className="w-full h-24 p-4 bg-secondary border border-border rounded-xl outline-none focus:ring-4 focus:ring-primary/5 transition-all resize-none text-sm font-bold shadow-inner"
                       placeholder="Lütfen eklemek istediğiniz diğer tehlike, risk ve önlemleri detaylıca belirtiniz..."
                       value={formData.metadata['otherRisksAndMeasures'] || ''}
                       onChange={e => setFormData({...formData, metadata: {...formData.metadata, otherRisksAndMeasures: e.target.value}})}
@@ -1173,12 +1171,12 @@ const ChecklistForm = () => {
                 )}
               </div>
             ) : (
-              <div className="card-premium overflow-hidden !p-0 divide-y divide-slate-100 shadow-xl border-slate-100">
+              <div className="card-premium overflow-hidden !p-0 divide-y divide-border shadow-xl border-border">
                 {section.items.map((q) => (
-                  <div key={q.id} className="p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-50/50 transition-colors group">
+                  <div key={q.id} className="p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-secondary/50 transition-colors group">
                     <div className="flex gap-4 min-w-0 flex-1">
-                      <span className="font-black text-primary text-[10px] flex-shrink-0 bg-slate-50 w-6 h-6 rounded-md flex items-center justify-center border border-slate-100 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all">{q.id.replace(/[^0-9]/g, '') || q.id}</span>
-                      <p className="text-sm font-bold text-slate-700 leading-snug">{q.text}</p>
+                      <span className="font-black text-primary text-[10px] flex-shrink-0 bg-secondary w-6 h-6 rounded-md flex items-center justify-center border border-border group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all">{q.id.replace(/[^0-9]/g, '') || q.id}</span>
+                      <p className="text-sm font-bold text-foreground leading-snug">{q.text}</p>
                     </div>
                     
                     <div className="flex items-center gap-2 flex-shrink-0">
@@ -1187,8 +1185,8 @@ const ChecklistForm = () => {
                         onClick={() => handleResultChange(q.id, 'OK')}
                         className={`flex-1 md:flex-none px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 border transition-all active:scale-95 ${
                           formData.results[q.id] === 'OK' 
-                            ? 'bg-primary border-primary text-white shadow-md shadow-primary/20' 
-                            : 'bg-white border-slate-100 text-slate-300 hover:border-primary/20 shadow-sm'
+                            ? 'bg-primary border-primary text-primary-foreground shadow-md shadow-primary/20' 
+                            : 'bg-background border-border text-muted-foreground hover:border-primary/20 shadow-sm'
                         }`}
                       >
                         <CheckCircle size={14} /> EVET
@@ -1199,7 +1197,7 @@ const ChecklistForm = () => {
                         className={`flex-1 md:flex-none px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 border transition-all active:scale-95 ${
                           formData.results[q.id] === 'NOT_OK' 
                             ? 'bg-red-600 border-red-600 text-white shadow-md shadow-red-200' 
-                            : 'bg-white border-slate-100 text-slate-300 hover:border-red-200 shadow-sm'
+                            : 'bg-background border-border text-muted-foreground hover:border-red-200 shadow-sm'
                         }`}
                       >
                         <XCircle size={14} /> HAYIR
@@ -1209,8 +1207,8 @@ const ChecklistForm = () => {
                         onClick={() => handleResultChange(q.id, 'N/A')}
                         className={`flex-1 md:flex-none px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 border transition-all active:scale-95 ${
                           formData.results[q.id] === 'N/A' 
-                            ? 'bg-slate-500 border-slate-500 text-white shadow-md shadow-slate-200' 
-                            : 'bg-white border-slate-100 text-slate-300 hover:border-slate-500 shadow-sm'
+                            ? 'bg-slate-500 border-border text-white shadow-md shadow-slate-200' 
+                            : 'bg-background border-border text-muted-foreground hover:border-border shadow-sm'
                         }`}
                       >
                         <AlertTriangle size={14} /> G.D.
@@ -1223,38 +1221,38 @@ const ChecklistForm = () => {
 
             {section.section === "YAPILACAK İŞ" && formData.type === 'WORK_PERMIT' && (
               <div className="space-y-6 mt-6">
-                <div className="card-premium space-y-3 shadow-xl border-slate-100">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-primary block leading-tight">
+                <div className="card-premium space-y-3 shadow-xl border-border">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground block leading-tight">
                     İşin Detaylı Tanımı ve Alınacak Önlemler 
-                    <span className="block text-slate-400 font-bold lowercase mt-0.5">(Bu iş izni kapsamında yapılacak iş adımları ve alınacak önlemler tanımlanacaktır)</span>
+                    <span className="block text-muted-foreground font-bold lowercase mt-0.5">(Bu iş izni kapsamında yapılacak iş adımları ve alınacak önlemler tanımlanacaktır)</span>
                   </label>
                   <textarea
-                    className="w-full h-40 p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-4 focus:ring-primary/5 transition-all resize-none text-sm font-bold shadow-inner"
+                    className="w-full h-40 p-4 bg-secondary border border-border rounded-xl outline-none focus:ring-4 focus:ring-primary/5 transition-all resize-none text-sm font-bold shadow-inner"
                     placeholder="Lütfen iş adımlarını ve güvenlik önlemlerini detaylıca belirtiniz..."
                     value={formData.metadata['workDescriptionDetail'] || ''}
                     onChange={e => setFormData({...formData, metadata: {...formData.metadata, workDescriptionDetail: e.target.value}})}
                   />
                 </div>
 
-                <div className="card-premium space-y-4 shadow-xl border-slate-100">
-                  <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-50 pb-2">İşi Yapacaklar</h3>
+                <div className="card-premium space-y-4 shadow-xl border-border">
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground border-b border-slate-50 pb-2">İşi Yapacaklar</h3>
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                       <thead>
-                        <tr className="border-b border-slate-200">
-                          <th className="py-2 text-[10px] font-black uppercase tracking-widest text-slate-400">Adı Soyadı</th>
-                          <th className="py-2 text-[10px] font-black uppercase tracking-widest text-slate-400">Görevi</th>
-                          <th className="py-2 text-[10px] font-black uppercase tracking-widest text-slate-400 text-right">İmza</th>
+                        <tr className="border-b border-border">
+                          <th className="py-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground">Adı Soyadı</th>
+                          <th className="py-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground">Görevi</th>
+                          <th className="py-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground text-right">İmza</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100">
+                      <tbody className="divide-y divide-border">
                         {[1, 2, 3, 4, 5].map((num) => (
                           <tr key={num}>
                             <td className="py-3 pr-4">
                               <input 
                                 type="text"
                                 placeholder="Adı Soyadı"
-                                className="w-full bg-transparent border-b border-slate-100 focus:border-primary outline-none text-xs font-bold py-1"
+                                className="w-full bg-transparent border-b border-border focus:border-primary outline-none text-xs font-bold py-1"
                                 value={formData.metadata[`workerName${num}`] || ''}
                                 onChange={e => setFormData({...formData, metadata: {...formData.metadata, [`workerName${num}`]: e.target.value}})}
                               />
@@ -1263,13 +1261,13 @@ const ChecklistForm = () => {
                               <input 
                                 type="text"
                                 placeholder="Görevi"
-                                className="w-full bg-transparent border-b border-slate-100 focus:border-primary outline-none text-xs font-bold py-1"
+                                className="w-full bg-transparent border-b border-border focus:border-primary outline-none text-xs font-bold py-1"
                                 value={formData.metadata[`workerDuty${num}`] || ''}
                                 onChange={e => setFormData({...formData, metadata: {...formData.metadata, [`workerDuty${num}`]: e.target.value}})}
                               />
                             </td>
                             <td className="py-3 text-right">
-                              <span className="text-[9px] italic text-slate-300 uppercase font-black">Dijital Onay Bekleniyor</span>
+                              <span className="text-[9px] italic text-muted-foreground uppercase font-black">Dijital Onay Bekleniyor</span>
                             </td>
                           </tr>
                         ))}
@@ -1278,34 +1276,34 @@ const ChecklistForm = () => {
                   </div>
                 </div>
 
-                <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-2">
-                  <p className="text-[10px] font-bold text-slate-500 leading-relaxed">
+                <div className="p-4 bg-secondary rounded-xl border border-border space-y-2">
+                  <p className="text-[10px] font-bold text-muted-foreground leading-relaxed">
                     Not1: İsimlerde değişiklik olması halinde bu formda belirtilen kriterlere sahip olmak şartıyla İş Öncesi Risk Analiz formuna yeni isimler eklenebilir.<br/>
                     Not2: Çalışan sayısı yukarıdaki tablodan fazla olursa formun arka yüzü kullanılabilir.
                   </p>
                 </div>
 
-                <div className="card-premium space-y-6 shadow-xl border-slate-100">
-                  <div className="border-b border-slate-100 pb-4">
-                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-6">TALEP EDEN (YÜKLENİCİ)</h3>
+                <div className="card-premium space-y-6 shadow-xl border-border">
+                  <div className="border-b border-border pb-4">
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-accent mb-6">TALEP EDEN (YÜKLENİCİ)</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase text-slate-400">Yüklenici Ekip İSG Sorumlusu</label>
-                        <input type="text" placeholder="Adı Soyadı" className="w-full bg-transparent border-b-2 border-slate-100 focus:border-primary outline-none text-xs font-bold py-1" 
+                        <label className="text-[10px] font-black uppercase text-muted-foreground">Yüklenici Ekip İSG Sorumlusu</label>
+                        <input type="text" placeholder="Adı Soyadı" className="w-full bg-transparent border-b-2 border-border focus:border-primary outline-none text-xs font-bold py-1" 
                           value={formData.metadata['wpContractorIsgResponsible'] || ''}
                           onChange={e => setFormData({...formData, metadata: {...formData.metadata, wpContractorIsgResponsible: e.target.value}})}
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase text-slate-400">Yüklenici İş Güvenliği Uzmanı</label>
-                        <input type="text" placeholder="Adı Soyadı" className="w-full bg-transparent border-b-2 border-slate-100 focus:border-primary outline-none text-xs font-bold py-1" 
+                        <label className="text-[10px] font-black uppercase text-muted-foreground">Yüklenici İş Güvenliği Uzmanı</label>
+                        <input type="text" placeholder="Adı Soyadı" className="w-full bg-transparent border-b-2 border-border focus:border-primary outline-none text-xs font-bold py-1" 
                           value={formData.metadata['wpContractorIsgSpecialist'] || ''}
                           onChange={e => setFormData({...formData, metadata: {...formData.metadata, wpContractorIsgSpecialist: e.target.value}})}
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase text-slate-400">Yüklenici İşveren / Vekili</label>
-                        <input type="text" placeholder="Adı Soyadı" className="w-full bg-transparent border-b-2 border-slate-100 focus:border-primary outline-none text-xs font-bold py-1" 
+                        <label className="text-[10px] font-black uppercase text-muted-foreground">Yüklenici İşveren / Vekili</label>
+                        <input type="text" placeholder="Adı Soyadı" className="w-full bg-transparent border-b-2 border-border focus:border-primary outline-none text-xs font-bold py-1" 
                           value={formData.metadata['wpContractorManager'] || ''}
                           onChange={e => setFormData({...formData, metadata: {...formData.metadata, wpContractorManager: e.target.value}})}
                         />
@@ -1314,24 +1312,24 @@ const ChecklistForm = () => {
                   </div>
 
                   <div>
-                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-6">ONAYLAYAN (YEDAŞ)</h3>
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-accent mb-6">ONAYLAYAN (YEDAŞ)</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase text-slate-400">Kontrolör</label>
+                        <label className="text-[10px] font-black uppercase text-muted-foreground">Kontrolör</label>
                         <div className="h-10 border-b-2 border-slate-50 flex items-end">
-                           <span className="text-[10px] italic text-slate-300 font-bold mb-1">Elektronik Onay Sistemi</span>
+                           <span className="text-[10px] italic text-muted-foreground font-bold mb-1">Elektronik Onay Sistemi</span>
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase text-slate-400">İş Güvenliği Uzmanı</label>
+                        <label className="text-[10px] font-black uppercase text-muted-foreground">İş Güvenliği Uzmanı</label>
                         <div className="h-10 border-b-2 border-slate-50 flex items-end">
-                           <span className="text-[10px] italic text-slate-300 font-bold mb-1">Elektronik Onay Sistemi</span>
+                           <span className="text-[10px] italic text-muted-foreground font-bold mb-1">Elektronik Onay Sistemi</span>
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase text-slate-400">Yatırım Birimi Yöneticisi/Şefi</label>
+                        <label className="text-[10px] font-black uppercase text-muted-foreground">Yatırım Birimi Yöneticisi/Şefi</label>
                         <div className="h-10 border-b-2 border-slate-50 flex items-end">
-                           <span className="text-[10px] italic text-slate-300 font-bold mb-1">Elektronik Onay Sistemi</span>
+                           <span className="text-[10px] italic text-muted-foreground font-bold mb-1">Elektronik Onay Sistemi</span>
                         </div>
                       </div>
                     </div>
@@ -1346,77 +1344,77 @@ const ChecklistForm = () => {
 
         {formData.type === 'CONTRACTOR_AUDIT' && (
           <>
-            <div className="card-premium space-y-3 shadow-xl border-slate-100">
-              <label className="text-[10px] font-black uppercase tracking-widest text-primary block leading-tight">
+            <div className="card-premium space-y-3 shadow-xl border-border">
+              <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground block leading-tight">
                 KONTROL SONUCU:
               </label>
               <textarea
-                className="w-full h-32 p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-4 focus:ring-primary/5 transition-all resize-none text-sm font-bold shadow-inner"
+                className="w-full h-32 p-4 bg-secondary border border-border rounded-xl outline-none focus:ring-4 focus:ring-primary/5 transition-all resize-none text-sm font-bold shadow-inner"
                 placeholder="Genel denetim sonuçlarını ve varsa ek notlarınızı buraya yazınız..."
                 value={formData.remarks}
                 onChange={e => setFormData({...formData, remarks: e.target.value})}
               />
             </div>
 
-            <div className="card-premium space-y-6 shadow-xl border-slate-100">
-              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary border-b border-slate-50 pb-2 text-center">KONTROL YAPAN</h3>
+            <div className="card-premium space-y-6 shadow-xl border-border">
+              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-accent border-b border-slate-50 pb-2 text-center">KONTROL YAPAN</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
-                    <label className="text-[10px] font-black uppercase text-slate-400 min-w-[80px]">Adı Soyadı:</label>
-                    <input type="text" className="flex-1 bg-transparent border-b border-slate-100 focus:border-primary outline-none text-xs font-bold py-1" 
+                    <label className="text-[10px] font-black uppercase text-muted-foreground min-w-[80px]">Adı Soyadı:</label>
+                    <input type="text" className="flex-1 bg-transparent border-b border-border focus:border-primary outline-none text-xs font-bold py-1" 
                       value={formData.metadata['inspectorName1'] || ''}
                       onChange={e => setFormData({...formData, metadata: {...formData.metadata, inspectorName1: e.target.value}})}
                     />
                   </div>
                   <div className="flex items-center gap-2">
-                    <label className="text-[10px] font-black uppercase text-slate-400 min-w-[80px]">Unvanı:</label>
-                    <input type="text" className="flex-1 bg-transparent border-b border-slate-100 focus:border-primary outline-none text-xs font-bold py-1" 
+                    <label className="text-[10px] font-black uppercase text-muted-foreground min-w-[80px]">Unvanı:</label>
+                    <input type="text" className="flex-1 bg-transparent border-b border-border focus:border-primary outline-none text-xs font-bold py-1" 
                       value={formData.metadata['inspectorTitle1'] || ''}
                       onChange={e => setFormData({...formData, metadata: {...formData.metadata, inspectorTitle1: e.target.value}})}
                     />
                   </div>
                   <div className="flex items-center gap-2">
-                    <label className="text-[10px] font-black uppercase text-slate-400 min-w-[80px]">Tarih:</label>
-                    <input type="date" className="flex-1 bg-transparent border-b border-slate-100 focus:border-primary outline-none text-xs font-bold py-1" 
+                    <label className="text-[10px] font-black uppercase text-muted-foreground min-w-[80px]">Tarih:</label>
+                    <input type="date" className="flex-1 bg-transparent border-b border-border focus:border-primary outline-none text-xs font-bold py-1" 
                       value={formData.metadata['inspectorDate1'] || ''}
                       onChange={e => setFormData({...formData, metadata: {...formData.metadata, inspectorDate1: e.target.value}})}
                     />
                   </div>
                   <div className="flex items-center gap-2 pt-2">
-                    <label className="text-[10px] font-black uppercase text-slate-400 min-w-[80px]">İmzası:</label>
-                    <div className="flex-1 h-8 border-b border-dashed border-slate-200 flex items-end">
-                      <span className="text-[9px] italic text-slate-300">Elektronik Onay</span>
+                    <label className="text-[10px] font-black uppercase text-muted-foreground min-w-[80px]">İmzası:</label>
+                    <div className="flex-1 h-8 border-b border-dashed border-border flex items-end">
+                      <span className="text-[9px] italic text-muted-foreground">Elektronik Onay</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
-                    <label className="text-[10px] font-black uppercase text-slate-400 min-w-[80px]">Adı Soyadı:</label>
-                    <input type="text" className="flex-1 bg-transparent border-b border-slate-100 focus:border-primary outline-none text-xs font-bold py-1" 
+                    <label className="text-[10px] font-black uppercase text-muted-foreground min-w-[80px]">Adı Soyadı:</label>
+                    <input type="text" className="flex-1 bg-transparent border-b border-border focus:border-primary outline-none text-xs font-bold py-1" 
                       value={formData.metadata['inspectorName2'] || ''}
                       onChange={e => setFormData({...formData, metadata: {...formData.metadata, inspectorName2: e.target.value}})}
                     />
                   </div>
                   <div className="flex items-center gap-2">
-                    <label className="text-[10px] font-black uppercase text-slate-400 min-w-[80px]">Unvanı:</label>
-                    <input type="text" className="flex-1 bg-transparent border-b border-slate-100 focus:border-primary outline-none text-xs font-bold py-1" 
+                    <label className="text-[10px] font-black uppercase text-muted-foreground min-w-[80px]">Unvanı:</label>
+                    <input type="text" className="flex-1 bg-transparent border-b border-border focus:border-primary outline-none text-xs font-bold py-1" 
                       value={formData.metadata['inspectorTitle2'] || ''}
                       onChange={e => setFormData({...formData, metadata: {...formData.metadata, inspectorTitle2: e.target.value}})}
                     />
                   </div>
                   <div className="flex items-center gap-2">
-                    <label className="text-[10px] font-black uppercase text-slate-400 min-w-[80px]">Tarih:</label>
-                    <input type="date" className="flex-1 bg-transparent border-b border-slate-100 focus:border-primary outline-none text-xs font-bold py-1" 
+                    <label className="text-[10px] font-black uppercase text-muted-foreground min-w-[80px]">Tarih:</label>
+                    <input type="date" className="flex-1 bg-transparent border-b border-border focus:border-primary outline-none text-xs font-bold py-1" 
                       value={formData.metadata['inspectorDate2'] || ''}
                       onChange={e => setFormData({...formData, metadata: {...formData.metadata, inspectorDate2: e.target.value}})}
                     />
                   </div>
                   <div className="flex items-center gap-2 pt-2">
-                    <label className="text-[10px] font-black uppercase text-slate-400 min-w-[80px]">İmzası:</label>
-                    <div className="flex-1 h-8 border-b border-dashed border-slate-200 flex items-end">
-                      <span className="text-[9px] italic text-slate-300">Elektronik Onay</span>
+                    <label className="text-[10px] font-black uppercase text-muted-foreground min-w-[80px]">İmzası:</label>
+                    <div className="flex-1 h-8 border-b border-dashed border-border flex items-end">
+                      <span className="text-[9px] italic text-muted-foreground">Elektronik Onay</span>
                     </div>
                   </div>
                 </div>
@@ -1426,44 +1424,44 @@ const ChecklistForm = () => {
         )}
 
         {formData.type === 'RISK_ANALYSIS' && (
-          <div className="card-premium space-y-4 shadow-xl border-slate-100">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Ekip Üyeleri (Risk Azaltma Konuşması Bilgilendirme Kaydı)</h3>
+          <div className="card-premium space-y-4 shadow-xl border-border">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Ekip Üyeleri (Risk Azaltma Konuşması Bilgilendirme Kaydı)</h3>
             <div className="space-y-3">
               {[1, 2, 3, 4].map((num) => (
                 <div key={num} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <input
                     type="text"
                     placeholder={`${num}. Ekip Üyesi Adı Soyadı`}
-                    className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold outline-none focus:border-primary transition-all"
+                    className="w-full p-3 bg-secondary border border-border rounded-xl text-sm font-bold outline-none focus:border-primary transition-all"
                     value={formData.metadata[`teamMemberName${num}`] || ''}
                     onChange={e => setFormData({...formData, metadata: {...formData.metadata, [`teamMemberName${num}`]: e.target.value}})}
                   />
-                  <div className="flex items-center gap-2 p-3 bg-slate-100/50 rounded-xl border border-dashed border-slate-200">
-                    <span className="text-[10px] font-black uppercase text-slate-400">Dijital İmza</span>
+                  <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-xl border border-dashed border-border">
+                    <span className="text-[10px] font-black uppercase text-muted-foreground">Dijital İmza</span>
                     <div className="flex-1 h-px bg-slate-200" />
-                    <span className="text-[10px] italic text-slate-300">Bekleniyor</span>
+                    <span className="text-[10px] italic text-muted-foreground">Bekleniyor</span>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-border">
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Ekip İSG Sorumlusu</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Ekip İSG Sorumlusu</label>
                 <input
                   type="text"
                   placeholder="Adı Soyadı"
-                  className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold outline-none focus:border-primary transition-all"
+                  className="w-full p-3 bg-secondary border border-border rounded-xl text-sm font-bold outline-none focus:border-primary transition-all"
                   value={formData.metadata['isgResponsible'] || ''}
                   onChange={e => setFormData({...formData, metadata: {...formData.metadata, isgResponsible: e.target.value}})}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">İş Güvenliği Uzmanı</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">İş Güvenliği Uzmanı</label>
                 <input
                   type="text"
                   placeholder="Adı Soyadı"
-                  className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold outline-none focus:border-primary transition-all"
+                  className="w-full p-3 bg-secondary border border-border rounded-xl text-sm font-bold outline-none focus:border-primary transition-all"
                   value={formData.metadata['isgSpecialist'] || ''}
                   onChange={e => setFormData({...formData, metadata: {...formData.metadata, isgSpecialist: e.target.value}})}
                 />
@@ -1474,24 +1472,24 @@ const ChecklistForm = () => {
 
         {formData.type === 'SITE_AUDIT' && (
           <div className="space-y-6">
-            <div className="card-premium space-y-4 shadow-xl border-slate-100">
-              <h3 className="text-[10px] font-black uppercase text-primary tracking-widest border-b border-slate-50 pb-3">Denetim Sonucu</h3>
-              <label className="flex items-start gap-3 p-4 bg-slate-50 rounded-xl cursor-pointer group hover:bg-primary/5 transition-all">
+            <div className="card-premium space-y-4 shadow-xl border-border">
+              <h3 className="text-[10px] font-black uppercase text-accent tracking-widest border-b border-slate-50 pb-3">Denetim Sonucu</h3>
+              <label className="flex items-start gap-3 p-4 bg-secondary rounded-xl cursor-pointer group hover:bg-primary/5 transition-all">
                 <input 
                   type="checkbox" 
-                  className="mt-1 w-4 h-4 text-primary rounded"
+                  className="mt-1 w-4 h-4 text-accent rounded"
                   checked={formData.metadata['auditResultCompliant'] === 'true'}
                   onChange={e => setFormData({...formData, metadata: {...formData.metadata, auditResultCompliant: e.target.checked.toString()}})}
                 />
-                <span className="text-xs font-bold text-slate-700 leading-relaxed group-hover:text-primary transition-colors">
+                <span className="text-xs font-bold text-foreground leading-relaxed group-hover:text-primary transition-colors">
                   Yapılan kontrollerde iş güvenliği açısından herhangi bir uygunsuz duruma rastlanılmamıştır.
                 </span>
               </label>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">AÇIKLAMA:</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">AÇIKLAMA:</label>
                 <textarea
-                  className="w-full h-32 p-4 bg-white border border-slate-200 rounded-xl outline-none focus:ring-4 focus:ring-primary/5 transition-all resize-none text-sm font-bold shadow-inner"
+                  className="w-full h-32 p-4 bg-background border border-border rounded-xl outline-none focus:ring-4 focus:ring-primary/5 transition-all resize-none text-sm font-bold shadow-inner"
                   placeholder="Denetimle ilgili ek açıklama ve notlarınızı buraya giriniz..."
                   value={formData.remarks}
                   onChange={e => setFormData({...formData, remarks: e.target.value})}
@@ -1499,16 +1497,16 @@ const ChecklistForm = () => {
               </div>
             </div>
 
-            <div className="card-premium !p-0 overflow-hidden shadow-xl border-slate-200">
-              <div className="bg-slate-50 p-2 text-center border-b border-slate-200">
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">DENETLEYENLER</span>
+            <div className="card-premium !p-0 overflow-hidden shadow-xl border-border">
+              <div className="bg-secondary p-2 text-center border-b border-border">
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">DENETLEYENLER</span>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-slate-200">
+              <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-border">
                 {[1, 2].map(num => (
-                  <div key={num} className="divide-y divide-slate-200">
+                  <div key={num} className="divide-y divide-border">
                     <div className="flex items-stretch min-h-[40px]">
-                      <div className="w-32 bg-slate-50 p-2 flex items-center border-r border-slate-200">
-                        <label className="text-[9px] font-black uppercase text-slate-400">ADI-SOYADI:</label>
+                      <div className="w-32 bg-secondary p-2 flex items-center border-r border-border">
+                        <label className="text-[9px] font-black uppercase text-muted-foreground">ADI-SOYADI:</label>
                       </div>
                       <input 
                         type="text"
@@ -1518,8 +1516,8 @@ const ChecklistForm = () => {
                       />
                     </div>
                     <div className="flex items-stretch min-h-[40px]">
-                      <div className="w-32 bg-slate-50 p-2 flex items-center border-r border-slate-200">
-                        <label className="text-[9px] font-black uppercase text-slate-400">Sicil No:</label>
+                      <div className="w-32 bg-secondary p-2 flex items-center border-r border-border">
+                        <label className="text-[9px] font-black uppercase text-muted-foreground">Sicil No:</label>
                       </div>
                       <input 
                         type="text"
@@ -1529,8 +1527,8 @@ const ChecklistForm = () => {
                       />
                     </div>
                     <div className="flex items-stretch min-h-[40px]">
-                      <div className="w-32 bg-slate-50 p-2 flex items-center border-r border-slate-200">
-                        <label className="text-[9px] font-black uppercase text-slate-400">Unvanı:</label>
+                      <div className="w-32 bg-secondary p-2 flex items-center border-r border-border">
+                        <label className="text-[9px] font-black uppercase text-muted-foreground">Unvanı:</label>
                       </div>
                       <input 
                         type="text"
@@ -1540,11 +1538,11 @@ const ChecklistForm = () => {
                       />
                     </div>
                     <div className="flex items-stretch min-h-[60px]">
-                      <div className="w-32 bg-slate-50 p-2 flex items-center border-r border-slate-200">
-                        <label className="text-[9px] font-black uppercase text-slate-400">İmzası:</label>
+                      <div className="w-32 bg-secondary p-2 flex items-center border-r border-border">
+                        <label className="text-[9px] font-black uppercase text-muted-foreground">İmzası:</label>
                       </div>
                       <div className="flex-1 p-2 flex items-center justify-center">
-                        <span className="text-[8px] italic text-slate-300 uppercase font-black tracking-widest">DİJİTAL ONAY SİSTEMİ</span>
+                        <span className="text-[8px] italic text-muted-foreground uppercase font-black tracking-widest">DİJİTAL ONAY SİSTEMİ</span>
                       </div>
                     </div>
                   </div>
@@ -1555,14 +1553,14 @@ const ChecklistForm = () => {
         )}
 
         <div className="card-premium space-y-4 shadow-xl">
-          <label className="text-[10px] font-black uppercase tracking-widest text-primary mb-2 block tracking-[0.1em]">Resmi Evrak Takibi</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-2 block tracking-[0.1em]">Resmi Evrak Takibi</label>
           <div 
             className={`flex items-center gap-4 p-5 rounded-2xl border-2 cursor-pointer transition-all active:scale-[0.99] ${
-              formData.physicalDocumentReady ? 'bg-green-600 border-green-600 text-white shadow-lg shadow-green-200' : 'bg-slate-50 border-slate-100 text-slate-400 hover:border-green-200'
+              formData.physicalDocumentReady ? 'bg-green-600 border-green-600 text-white shadow-lg shadow-green-200' : 'bg-secondary border-border text-muted-foreground hover:border-green-200'
             }`} 
             onClick={() => setFormData({...formData, physicalDocumentReady: !formData.physicalDocumentReady})}
           >
-            <div className={`w-6 h-6 rounded-full flex items-center justify-center border-2 transition-all ${formData.physicalDocumentReady ? 'bg-white border-white text-green-600' : 'bg-white border-slate-200'}`}>
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center border-2 transition-all ${formData.physicalDocumentReady ? 'bg-background border-white text-green-600' : 'bg-background border-border'}`}>
               {formData.physicalDocumentReady && <CheckCircle size={18} />}
             </div>
             <span className="text-xs sm:text-sm font-black uppercase tracking-tight">Islak İmzalı Evrak Hazırlandı ve Arşivlendi</span>
@@ -1572,7 +1570,7 @@ const ChecklistForm = () => {
         <button 
           type="submit"
           disabled={loading}
-          className="w-full bg-primary text-white py-6 rounded-2xl font-black text-xl flex items-center justify-center gap-4 hover:bg-slate-800 shadow-2xl shadow-primary/30 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest"
+          className="w-full bg-accent text-accent-foreground py-6 rounded-2xl font-black text-xl flex items-center justify-center gap-4 hover:brightness-95 shadow-2xl shadow-accent/20 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest"
         >
           {loading ? (
             <Loader2 className="animate-spin" size={28} />
