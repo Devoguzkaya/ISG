@@ -232,28 +232,6 @@ export const ALL_QUESTIONS: Record<string, ChecklistTemplate> = {
     ]
   },
   CONTRACTOR_AUDIT: {
-    customFields: [
-      { id: 'contractorName', label: 'Yüklenici/Altyüklenici', type: 'text' },
-      { id: 'projectName', label: 'Proje Adı', type: 'text' },
-      { id: 'region', label: 'İli/İşletmesi', type: 'text' },
-      { id: 'authorizedPerson', label: 'Yetkili Adı Soyadı', type: 'text' },
-      { id: 'dateTime', label: 'Tarih-Saat', type: 'datetime-local' },
-    ],
-    sections: [
-      {
-        section: 'GENEL DENETİM KRİTERLERİ',
-        items: [
-          { id: 'C1', text: 'Çalışanların QR kodlu kimlik kartları var mı?' },
-          { id: 'C2', text: 'İşbaşı İSG konuşması yapıldı mı?' },
-          { id: 'C3', text: 'KKD standartlara uygun ve deformasyonsuz mu?' },
-          { id: 'C4', text: 'Elektrik kesme protokolü düzenlenmiş mi?' },
-          { id: 'C5', text: 'Kazı alanı güvenlik önlemleri alındı mı?' },
-          { id: 'C6', text: 'Atık yönetimi ve çevre temizliği uygun mu?' },
-        ]
-      }
-    ]
-  },
-  CONTRACTOR_AUDIT: {
     sections: [
       {
         section: "İşbaşı Belgeleri",
