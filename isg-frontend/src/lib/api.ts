@@ -26,6 +26,13 @@ export const personnelApi = {
   delete: (id: number) => api.delete(`/personnel/${id}`),
 };
 
+export const documentsApi = {
+  getAll: () => api.get('/documents'),
+  getByPersonnel: (id: number) => api.get(`/documents/personnel/${id}`),
+  updateStatus: (personnelId: number, documentType: string, isReady: boolean) => 
+    api.post('/documents/status', null, { params: { personnelId, documentType, isReady } }),
+};
+
 export const complianceApi = {
   getExpiringCertificates: (days: number = 30) => api.get(`/compliance/expiring/certificates?days=${days}`),
   getExpiringVehicleDocuments: (days: number = 30) => api.get(`/compliance/expiring/vehicle-documents?days=${days}`),

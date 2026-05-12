@@ -154,14 +154,14 @@ export default function Home() {
           </Link>
 
           <Link 
-            href="/calendar"
+            href="/documents"
             className="flex items-center justify-between p-5 bg-background border border-border rounded-2xl hover:bg-secondary transition-all group shadow-sm active:scale-[0.98]"
           >
             <div className="flex items-center gap-4 text-foreground">
               <div className="p-2 bg-secondary rounded-lg">
                 <Plus size={20} className="text-muted-foreground" />
               </div>
-              <span className="font-black text-sm uppercase tracking-tight">Rapor Görüntüle</span>
+              <span className="font-black text-sm uppercase tracking-tight">Evrak Takibi</span>
             </div>
             <ArrowUpRight size={18} className="opacity-0 group-hover:opacity-40 transition-opacity" />
           </Link>
