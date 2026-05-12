@@ -1,0 +1,53 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: isg-db
+    environment:
+      POSTGRES_USER: isguser
+      POSTGRES_PASSWORD: isgpass123
+      POSTGRES_DB: isg_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - isg-network
+    restart: always
+
+  backend:
+    build: ./isg-backend
+    container_name: isg-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/isg_db
+      SPRING_DATASOURCE_USERNAME: isguser
+      SPRING_DATASOURCE_PASSWORD: isgpass123
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+    depends_on:
+      - db
+    networks:
+      - isg-network
+    restart: always
+
+  frontend:
+    build:
+      context: ./isg-frontend
+      args:
+        NEXT_PUBLIC_API_URL: http://192.168.1.105:8080/api
+    container_name: isg-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - isg-network
+    restart: always
+
+networks:
+  isg-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
