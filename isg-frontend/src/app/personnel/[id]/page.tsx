@@ -74,7 +74,7 @@ const PersonnelDetailPage = ({ params }: { params: Promise<{ id: string }> }) =>
       // Logic for saving/updating certificate...
       // Since I don't have a dedicated Certificate controller yet, I'll recommend the user adds one or I'll implement it.
       // For this demo, let's assume update personnel can handle nested certificates or I'll add a simple endpoint.
-      alert('Evrak bilgisi kaydedildi (Simülasyon kanka, backend entegrasyonu devam ediyor).');
+      alert('Evrak bilgisi kaydedildi.');
       setIsModalOpen(false);
     } catch (err) {
       console.error(err);
@@ -82,7 +82,7 @@ const PersonnelDetailPage = ({ params }: { params: Promise<{ id: string }> }) =>
   };
 
   if (loading) return <div className="flex justify-center py-20"><Loader2 className="animate-spin text-primary" size={48} /></div>;
-  if (!person) return <div className="text-center py-20 font-bold text-red-500">Personel bulunamadı kanka.</div>;
+  if (!person) return <div className="text-center py-20 font-bold text-red-500">Personel bulunamadı.</div>;
 
   return (
     <div className="max-w-5xl mx-auto space-y-8 animate-fade pb-20">

@@ -70,7 +70,7 @@ export const MapModal = ({ isOpen, onClose, initialPos, onSave, title = "Konum S
     <Modal isOpen={isOpen} onClose={onClose} title={title}>
       <div className="space-y-4">
         <p className="text-xs font-bold text-slate-400 italic">
-          Harita üzerinde denetimin yapıldığı yere tıkla kanka. İğneyi oraya bırakacağız.
+          Harita üzerinde denetimin yapıldığı yere tıklayınız. İşaretçi ilgili konuma yerleştirilecektir.
         </p>
         
         <div className="h-[400px] w-full rounded-xl overflow-hidden border border-slate-200 relative">

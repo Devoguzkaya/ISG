@@ -61,7 +61,7 @@ const VehiclesPage = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm('Bu aracı kalıcı olarak silmek istediğine emin misin kanka?')) return;
+    if (!window.confirm('Bu aracı kalıcı olarak silmek istediğinize emin misiniz?')) return;
     try {
       await vehiclesApi.delete(id);
       setVehicles(prev => prev.filter(v => v.id !== id));

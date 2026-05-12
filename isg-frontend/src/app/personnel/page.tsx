@@ -75,7 +75,7 @@ const PersonnelPage = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm('Bu personeli TAMAMEN silmek istediğine emin misin kanka?')) return;
+    if (!window.confirm('Bu personeli tamamen silmek istediğinize emin misiniz?')) return;
     try {
       await personnelApi.delete(id);
       setStaff(prev => prev.filter(p => p.id !== id));

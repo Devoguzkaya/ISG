@@ -183,7 +183,7 @@ const CalendarPage = () => {
             İSG Denetim Takvimi
           </h1>
           <p className="text-muted-foreground mt-1">
-            Çalışma olan günlerde ( <Construction className="inline text-amber-500" size={14} /> ) denetim formu doldurmak zorunludur kanka.
+            Çalışma olan günlerde ( <Construction className="inline text-amber-500" size={14} /> ) denetim formu doldurmak zorunludur.
           </p>
         </div>
         

@@ -62,6 +62,9 @@ public class Checklist {
     @Column(columnDefinition = "TEXT")
     private String generalRemarks;
 
+    @Column(columnDefinition = "TEXT")
+    private String metadataJson; // JSON string for custom fields (e.g., firmName, workDescription)
+
     @Column
     @Builder.Default
     private boolean physicalDocumentReady = false;

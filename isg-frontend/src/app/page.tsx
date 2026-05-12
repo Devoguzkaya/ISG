@@ -184,7 +184,7 @@ export default function Home() {
                 <div className="inline-flex p-3 bg-green-50 text-green-600 rounded-full">
                   <ClipboardCheck size={24} />
                 </div>
-                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Tüm evraklar güncel kanka!</p>
+                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Tüm evraklar günceldir.</p>
               </div>
             )}
           </div>

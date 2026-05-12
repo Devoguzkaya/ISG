@@ -32,7 +32,7 @@ const ChecklistsPage = () => {
     try {
       const updated = { ...selectedForMap, latitude: pos[0], longitude: pos[1] };
       await checklistsApi.update(selectedForMap.id, updated);
-      alert('Konum başarıyla güncellendi kanka!');
+      alert('Konum başarıyla güncellendi!');
       fetchChecklists();
     } catch (err) {
       console.error(err);
@@ -43,7 +43,7 @@ const ChecklistsPage = () => {
   const getOverallStatus = (item: any) => {
     // If any PERSONNEL audit is faulty, the whole report is "KUSURLU" for visual clarity
     const hasFaultyPersonnel = item.personnelAudits?.some((p: any) => !p.isCompliant);
-    const hasFaultyItems = item.items?.some((i: any) => i.result === false);
+    const hasFaultyItems = item.items?.some((i: any) => i.result === 'NOT_OK');
     return (hasFaultyPersonnel || hasFaultyItems) ? 'KUSURLU' : 'UYGUN';
   };
 
@@ -134,8 +134,11 @@ const ChecklistsPage = () => {
                           </div>
                         </td>
                         <td className="px-6 py-6 font-black italic">
-                          <div className="text-[10px] text-slate-400">
-                            {item.type === 'DAILY_VEHICLE' ? 'GÜNLÜK VİNÇ' : 'SAHA İSG'}
+                          <div className="text-[10px] text-slate-400 uppercase">
+                            {item.type === 'DAILY_VEHICLE' ? 'VİNÇ KONTROL' : 
+                             item.type === 'WORK_PERMIT' ? 'İŞ İZNİ' :
+                             item.type === 'RISK_ANALYSIS' ? 'RİSK ANALİZ' :
+                             item.type === 'SITE_AUDIT' ? 'SAHA DENETİM' : 'YÜKLENİCİ DENETİM'}
                           </div>
                         </td>
                         <td className="px-6 py-6">
@@ -203,8 +206,11 @@ const ChecklistsPage = () => {
                   </div>
 
                   <div className="flex items-center justify-between pt-2">
-                    <div className="text-[10px] font-black text-slate-400 italic">
-                      {item.type === 'DAILY_VEHICLE' ? 'GÜNLÜK VİNÇ' : 'SAHA İSG'}
+                    <div className="text-[10px] font-black text-slate-400 italic uppercase">
+                      {item.type === 'DAILY_VEHICLE' ? 'VİNÇ KONTROL' : 
+                       item.type === 'WORK_PERMIT' ? 'İŞ İZNİ' :
+                       item.type === 'RISK_ANALYSIS' ? 'RİSK ANALİZ' :
+                       item.type === 'SITE_AUDIT' ? 'SAHA DENETİM' : 'YÜKLENİCİ DENETİM'}
                     </div>
                     <div className="flex items-center gap-2">
                       <button 
@@ -226,7 +232,7 @@ const ChecklistsPage = () => {
           {checklists.length === 0 && (
             <div className="py-24 text-center">
               <ClipboardCheck className="mx-auto text-slate-200 mb-4" size={64} />
-              <p className="text-slate-400 font-bold uppercase tracking-widest text-sm text-center">Henüz denetim kaydı bulunmamaktadır kanka.</p>
+              <p className="text-slate-400 font-bold uppercase tracking-widest text-sm text-center">Henüz denetim kaydı bulunmamaktadır.</p>
             </div>
           )}
         </div>

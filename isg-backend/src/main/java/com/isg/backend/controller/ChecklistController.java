@@ -24,6 +24,11 @@ public class ChecklistController {
         return checklistService.getChecklistById(id);
     }
 
+    @PostMapping
+    public Checklist createChecklist(@RequestBody Checklist checklist) {
+        return checklistService.saveChecklist(checklist);
+    }
+
     @PutMapping("/{id}")
     public Checklist updateChecklist(@PathVariable Long id, @RequestBody Checklist checklist) {
         checklist.setId(id);

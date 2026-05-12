@@ -29,7 +29,7 @@ public class ChecklistItem {
     private String questionText;
 
     @Column(nullable = false)
-    private Boolean result; // true = Evet/Uygun, false = Hayır/Kusurlu
+    private String result; // "OK", "NOT_OK", "N/A" (Gerekli Değil)
 
     @Column(columnDefinition = "TEXT")
     private String remarks;
