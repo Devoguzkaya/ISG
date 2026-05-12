@@ -30,7 +30,7 @@ const CalendarPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   const [checklists, setChecklists] = useState<any[]>([]);
-  const [workStatuses, setWorkStatuses] = useState<Record<string, boolean>>({});
+  const [workStatuses, setWorkStatuses] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(true);
 
   const fetchCalendarData = async () => {
@@ -42,9 +42,9 @@ const CalendarPage = () => {
       ]);
       setChecklists(cRes.data);
       
-      const statusMap: Record<string, boolean> = {};
+      const statusMap: Record<string, any> = {};
       wRes.data.forEach((s: any) => {
-        statusMap[s.date] = s.workOccurred;
+        statusMap[s.date] = s;
       });
       setWorkStatuses(statusMap);
     } catch (err) {
@@ -69,12 +69,14 @@ const CalendarPage = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
   };
 
-  const handleToggleWork = async (dateStr: string, current: boolean) => {
+  const handleSaveDayStatus = async (dateStr: string, workOccurred: boolean, location: string) => {
     try {
-      await workStatusApi.toggle(dateStr, !current);
-      setWorkStatuses(prev => ({ ...prev, [dateStr]: !current }));
+      const existing = workStatuses[dateStr] || { date: dateStr };
+      const updated = { ...existing, workOccurred, location };
+      const res = await workStatusApi.save(updated);
+      setWorkStatuses(prev => ({ ...prev, [dateStr]: res.data }));
     } catch (err) {
-      console.error('Durum değiştirme hatası:', err);
+      console.error('Durum kaydetme hatası:', err);
     }
   };
 
@@ -112,7 +114,8 @@ const CalendarPage = () => {
       const date = new Date(year, month, d);
       const dateStr = date.toISOString().split('T')[0];
       const isToday = today.getDate() === d && today.getMonth() === month && today.getFullYear() === year;
-      const workOccurred = workStatuses[dateStr] || false;
+      const status = workStatuses[dateStr] || { workOccurred: false };
+      const workOccurred = status.workOccurred;
       const dayChecklists = checklists.filter(c => c.createdAt && c.createdAt.startsWith(dateStr));
       
       // Compliance Logic: Red if work occurred but no reports
@@ -122,7 +125,8 @@ const CalendarPage = () => {
       cells.push(
         <div 
           key={d} 
-          className={`h-28 sm:h-36 border-b border-r border-slate-100 dark:border-slate-800 p-2 sm:p-3 transition-all relative group flex flex-col ${
+          onClick={() => handleDateClick(d)}
+          className={`h-28 sm:h-36 border-b border-r border-slate-100 dark:border-slate-800 p-2 sm:p-3 transition-all relative group flex flex-col cursor-pointer ${
             isCriticalMissing ? 'bg-red-50/50 dark:bg-red-900/20' : isCompliant ? 'bg-green-50/30 dark:bg-green-900/20' : ''
           } ${isToday ? 'ring-2 ring-primary ring-inset z-10' : ''}`}
         >
@@ -130,19 +134,19 @@ const CalendarPage = () => {
             <span className={`text-sm font-black ${isToday ? 'text-primary' : 'text-slate-400'}`}>
               {d.toString().padStart(2, '0')}
             </span>
-            <button 
-              onClick={(e) => { e.stopPropagation(); handleToggleWork(dateStr, workOccurred); }}
-              className={`p-1 rounded-md transition-all ${workOccurred ? 'text-amber-500 bg-amber-50' : 'text-slate-300 hover:text-slate-400'}`}
-              title={workOccurred ? 'Çalışma Var' : 'Çalışma Yok'}
-            >
-              <Construction size={14} />
-            </button>
+            {workOccurred && (
+              <div className="text-amber-500" title="Çalışma Var">
+                <Construction size={14} />
+              </div>
+            )}
           </div>
 
-          <div 
-            onClick={() => handleDateClick(d)}
-            className="flex-grow cursor-pointer"
-          >
+          <div className="flex-grow">
+            {status.location && (
+              <p className="text-[9px] font-black text-slate-500 uppercase leading-tight truncate mb-1" title={status.location}>
+                {status.location}
+              </p>
+            )}
             <div className="flex flex-wrap gap-1 mt-1">
               {dayChecklists.map((c, idx) => (
                 <div key={idx} className="w-2 h-2 rounded-full bg-primary" title={c.type}></div>
@@ -163,7 +167,6 @@ const CalendarPage = () => {
           </div>
 
           <button 
-            onClick={() => handleDateClick(d)}
             className="absolute bottom-2 right-2 p-1.5 bg-white border border-slate-200 rounded-lg text-primary opacity-0 group-hover:opacity-100 transition-all shadow-sm hover:scale-110"
           >
             <Plus size={14} />
@@ -173,6 +176,9 @@ const CalendarPage = () => {
     }
     return cells;
   };
+
+  const selectedDateStr = selectedDate?.toISOString().split('T')[0] || '';
+  const selectedStatus = workStatuses[selectedDateStr] || { workOccurred: false, location: '' };
 
   return (
     <div className="space-y-8 animate-fade pb-10">
@@ -222,7 +228,8 @@ const CalendarPage = () => {
             {Array.from({ length: days }, (_, i) => i + 1).map(d => {
               const date = new Date(year, month, d);
               const dateStr = date.toISOString().split('T')[0];
-              const workOccurred = workStatuses[dateStr] || false;
+              const status = workStatuses[dateStr] || { workOccurred: false };
+              const workOccurred = status.workOccurred;
               const isToday = today.getDate() === d && today.getMonth() === month && today.getFullYear() === year;
               const dayChecklists = checklists.filter(c => c.createdAt && c.createdAt.startsWith(dateStr));
               const isCriticalMissing = workOccurred && dayChecklists.length === 0;
@@ -251,6 +258,9 @@ const CalendarPage = () => {
                         ) : (
                           <span className="text-[10px] font-black text-slate-400 bg-slate-100 px-2 py-0.5 rounded uppercase tracking-tighter">TATİL</span>
                         )}
+                        {status.location && (
+                          <span className="text-[10px] font-bold text-slate-500 uppercase truncate max-w-[100px]">{status.location}</span>
+                        )}
                       </div>
                       
                       <div className="mt-1 flex gap-1">
@@ -264,14 +274,6 @@ const CalendarPage = () => {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <button 
-                      onClick={(e) => { e.stopPropagation(); handleToggleWork(dateStr, workOccurred); }}
-                      className={`p-3 rounded-xl border transition-all ${
-                        workOccurred ? 'bg-amber-100 border-amber-200 text-amber-600' : 'bg-slate-50 border-slate-100 text-slate-300'
-                      }`}
-                    >
-                      <Construction size={18} />
-                    </button>
                     <div className="p-2 text-primary">
                       <Plus size={20} />
                     </div>
@@ -286,11 +288,44 @@ const CalendarPage = () => {
       <Modal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)}
-        title={`${selectedDate?.toLocaleDateString('tr-TR')} - İşlemler`}
+        title={`${selectedDate?.toLocaleDateString('tr-TR')} - Gün Özeti & İşlemler`}
       >
-        <div className="space-y-6">
-          <div>
-            <h3 className="text-xs font-black uppercase text-slate-400 mb-3 tracking-widest">Hızlı Form Oluştur</h3>
+        <div className="space-y-8">
+          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 space-y-4">
+            <h3 className="text-xs font-black uppercase text-slate-400 tracking-widest flex items-center gap-2">
+              <Construction size={14} className="text-amber-500" />
+              Günün Çalışma Durumu
+            </h3>
+            
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => handleSaveDayStatus(selectedDateStr, !selectedStatus.workOccurred, selectedStatus.location || '')}
+                className={`flex-1 py-4 rounded-xl font-black text-sm transition-all border-2 ${
+                  selectedStatus.workOccurred 
+                    ? 'bg-amber-500 border-amber-600 text-white shadow-lg shadow-amber-200' 
+                    : 'bg-white border-slate-200 text-slate-400 hover:border-slate-300'
+                }`}
+              >
+                {selectedStatus.workOccurred ? 'ÇALIŞMA VAR' : 'ÇALIŞMA YOK'}
+              </button>
+            </div>
+
+            {selectedStatus.workOccurred && (
+              <div className="space-y-2 animate-in fade-in slide-in-from-top-2">
+                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Çalışma Yapılan Bölge / Lokasyon</label>
+                <input 
+                  type="text"
+                  placeholder="Örn: Sinop Merkez Gelincik Mah."
+                  className="w-full p-4 bg-white border-2 border-slate-100 rounded-xl focus:border-amber-500 focus:ring-0 transition-all font-bold text-sm"
+                  value={selectedStatus.location || ''}
+                  onChange={(e) => handleSaveDayStatus(selectedDateStr, true, e.target.value)}
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xs font-black uppercase text-slate-400 tracking-widest">Hızlı Form Oluştur</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {Object.entries(CHECKLIST_TYPES).map(([type, label]) => (
                 <button

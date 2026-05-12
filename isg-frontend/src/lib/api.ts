@@ -53,7 +53,7 @@ export const notesApi = {
 
 export const workStatusApi = {
   getAll: () => api.get('/work-status'),
-  toggle: (date: string, workOccurred: boolean) => api.post('/work-status', { date, workOccurred })
+  save: (status: any) => api.post('/work-status', status),
 };
 
 export const settingsApi = {

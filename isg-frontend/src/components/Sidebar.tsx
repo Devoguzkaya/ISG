@@ -13,7 +13,9 @@ import {
   CalendarDays,
   Zap,
   Sun,
-  Moon
+  Moon,
+  FileCheck,
+  History
 } from 'lucide-react';
 import { settingsApi } from '@/lib/api';
 import { useTheme } from './ThemeProvider';
@@ -37,8 +39,9 @@ const Sidebar = ({ onClose }: { onClose?: () => void }) => {
 
   const navItems = [
     { name: 'Genel Durum', href: '/', icon: LayoutDashboard },
+    { name: 'Evrak Takibi', href: '/documents', icon: FileCheck },
     { name: 'Takvim', href: '/calendar', icon: CalendarDays },
-    { name: 'Denetim Geçmişi', href: '/checklists', icon: ClipboardCheck },
+    { name: 'Denetim Geçmişi', href: '/checklists', icon: History },
     { name: 'Personel Dosyaları', href: '/personnel', icon: Users },
     { name: 'Vinç Bilgileri', href: '/vehicles', icon: Truck },
     { name: 'Saha Notları', href: '/notes', icon: Notebook },

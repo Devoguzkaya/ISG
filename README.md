@@ -50,6 +50,21 @@ cd ISG
 # Start the entire system (DB + Backend + Frontend)
 docker-compose up -d --build
 ```
+
+## 🚀 Kurulum ve Çalıştırma
+
+### Lokal Geliştirme (Docker'sız)
+1. Backend: `cd isg-backend && mvn spring-boot:run`
+2. Frontend: `cd isg-frontend && npm run dev -- -p 3000`
+
+### Sunucu Kurulumu (Docker ile)
+Sunucuda Tailscale IP'si üzerinden ayağa kalkar:
+```bash
+docker-compose up -d --build
+```
+
+*Frontend 3001, Backend 8080 portundan hizmet verir.*
+
 *Frontend will be available at port 3001, Backend at 8080.*
 
 ---

@@ -23,4 +23,24 @@ public class WorkDayStatus {
     @Column(nullable = false)
     @Builder.Default
     private boolean workOccurred = false;
+
+    @Column
+    private String location;
+
+    // Physical site documents for this specific day
+    @Column
+    @Builder.Default
+    private boolean siteAuditReady = false;
+
+    @Column
+    @Builder.Default
+    private boolean craneChecklistReady = false;
+
+    @Column
+    @Builder.Default
+    private boolean workPermitReady = false;
+
+    @Column
+    @Builder.Default
+    private boolean riskAnalysisReady = false;
 }

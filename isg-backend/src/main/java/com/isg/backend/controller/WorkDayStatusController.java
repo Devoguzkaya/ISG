@@ -20,10 +20,15 @@ public class WorkDayStatusController {
     }
 
     @PostMapping
-    public WorkDayStatus toggleStatus(@RequestBody WorkDayStatus status) {
+    public WorkDayStatus saveStatus(@RequestBody WorkDayStatus status) {
         return repository.findByDate(status.getDate())
                 .map(existing -> {
                     existing.setWorkOccurred(status.isWorkOccurred());
+                    existing.setLocation(status.getLocation());
+                    existing.setSiteAuditReady(status.isSiteAuditReady());
+                    existing.setCraneChecklistReady(status.isCraneChecklistReady());
+                    existing.setWorkPermitReady(status.isWorkPermitReady());
+                    existing.setRiskAnalysisReady(status.isRiskAnalysisReady());
                     return repository.save(existing);
                 })
                 .orElseGet(() -> repository.save(status));
