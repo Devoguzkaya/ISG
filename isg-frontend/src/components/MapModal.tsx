@@ -5,22 +5,17 @@ import dynamic from 'next/dynamic';
 import { Loader2, Save, X } from 'lucide-react';
 import { Modal } from './Modal';
 
-// Dynamically import Leaflet components to avoid SSR issues
-const MapContainer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.MapContainer),
-  { ssr: false }
-);
-const TileLayer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.TileLayer),
-  { ssr: false }
-);
-const Marker = dynamic(
-  () => import('react-leaflet').then((mod) => mod.Marker),
-  { ssr: false }
-);
-const useMapEvents = dynamic(
-  () => import('react-leaflet').then((mod) => mod.useMapEvents),
-  { ssr: false }
+// Dynamically import the MapComponent to avoid SSR issues with Leaflet
+const MapComponent = dynamic(
+  () => import('./MapComponent'),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="absolute inset-0 flex items-center justify-center bg-secondary">
+        <Loader2 className="animate-spin text-primary" size={32} />
+      </div>
+    )
+  }
 );
 
 interface MapModalProps {
@@ -30,20 +25,6 @@ interface MapModalProps {
   onSave: (pos: [number, number]) => void;
   title?: string;
 }
-
-const LocationPicker = ({ onSelect, position }: { onSelect: (pos: [number, number]) => void, position: [number, number] | null }) => {
-  // @ts-ignore - useMapEvents is dynamic
-  useMapEvents({
-    click(e: any) {
-      onSelect([e.latlng.lat, e.latlng.lng]);
-    },
-  });
-
-  return position ? (
-    // @ts-ignore - Marker is dynamic
-    <Marker position={position} />
-  ) : null;
-};
 
 export const MapModal = ({ isOpen, onClose, initialPos, onSave, title = "Konum Seç / Güncelle" }: MapModalProps) => {
   const [selectedPos, setSelectedPos] = useState<[number, number] | null>(initialPos);
@@ -79,19 +60,10 @@ export const MapModal = ({ isOpen, onClose, initialPos, onSave, title = "Konum S
               <Loader2 className="animate-spin text-primary" size={32} />
             </div>
           ) : (
-            // @ts-ignore - MapContainer is dynamic
-            <MapContainer 
-              center={selectedPos || [41.015137, 28.979530]} 
-              zoom={13} 
-              style={{ height: '100%', width: '100%' }}
-            >
-              <TileLayer
-                // @ts-ignore
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              />
-              <LocationPicker onSelect={setSelectedPos} position={selectedPos} />
-            </MapContainer>
+            <MapComponent 
+              selectedPos={selectedPos} 
+              onSelect={setSelectedPos} 
+            />
           )}
         </div>
 
