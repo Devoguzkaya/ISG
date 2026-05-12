@@ -42,7 +42,8 @@ const ChecklistForm = () => {
     involvedVehicles: [] as string[],
     personnelAudits: [] as { id: number, name: string, isCompliant: boolean, remarks: string }[],
     results: {} as Record<string, 'OK' | 'NOT_OK' | 'N/A'>,
-    metadata: {} as Record<string, string>
+    metadata: {} as Record<string, string>,
+    remarks_map: {} as Record<string, string>
   });
 
   const template = ALL_QUESTIONS[formData.type];
@@ -151,6 +152,7 @@ const ChecklistForm = () => {
       type: newType,
       results: {},
       metadata: {},
+      remarks_map: {},
       personnelAudits: [],
       involvedVehicles: []
     }));
